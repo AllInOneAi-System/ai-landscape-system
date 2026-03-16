@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Complete Landscape 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0E0E10;--bg2:#16161A;--bg3:#1E1E24;--bg4:#28282E;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.16);
+  --text:#E8E6E0;--muted:#888780;--dim:#444441;
+  --t1:#7C6FE0;--t1l:#2D2860;--t1m:#4A4490;
+  --t2:#3DAF82;--t2l:#1A3D2E;--t2m:#267A5C;
+  --t3:#E09040;--t3l:#3D2810;--t3m:#A06820;
+  --t4:#6090D0;--t4l:#1A2840;--t4m:#3A6090;
+  --t5:#D06080;--t5l:#3D1020;--t5m:#904050;
+  --font-head:'Syne','Noto Sans Thai',sans-serif;
+  --font-body:'Noto Sans Thai','Syne',sans-serif;
+  --font-mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;overflow-x:hidden;}
+
+/* ── SETTINGS BAR ── */
+#settings-bar{background:var(--bg2);border-bottom:1px solid var(--border2);padding:10px 48px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+#settings-bar .lbl{font-size:11px;color:var(--muted);font-family:var(--font-mono);white-space:nowrap;}
+#api-key-input{flex:1;min-width:260px;max-width:400px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 12px;color:var(--text);font-family:var(--font-mono);font-size:12px;outline:none;transition:border-color .2s;}
+#api-key-input:focus{border-color:var(--t1);}
+#save-btn{background:var(--t1);color:#fff;border:none;border-radius:6px;padding:7px 18px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .2s;white-space:nowrap;}
+#save-btn:hover{opacity:.85;}
+#key-status{font-size:11px;font-family:var(--font-mono);}
+.status-ok{color:var(--t2);}
+.status-none{color:var(--muted);}
+
+/* ── HERO ── */
+.hero{padding:56px 48px 40px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(124,111,224,.1) 0%,transparent 70%);pointer-events:none;}
+.hero-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;color:var(--t1);text-transform:uppercase;margin-bottom:14px;}
+.hero h1{font-family:var(--font-head);font-size:clamp(26px,4vw,44px);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:10px;}
+.hero h1 span{color:var(--t1);}
+.hero-sub{font-size:14px;color:var(--muted);max-width:520px;line-height:1.7;}
+.hero-stats{display:flex;gap:28px;margin-top:28px;flex-wrap:wrap;}
+.stat{display:flex;flex-direction:column;gap:2px;}
+.stat-num{font-family:var(--font-head);font-size:26px;font-weight:800;line-height:1;}
+.stat-label{font-size:11px;color:var(--muted);}
+.api-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(61,175,130,.12);border:1px solid rgba(61,175,130,.3);border-radius:20px;padding:4px 12px;font-size:11px;color:var(--t2);font-family:var(--font-mono);margin-top:16px;}
+
+/* ── NAV ── */
+.sticky-nav{position:sticky;top:0;z-index:100;background:rgba(14,14,16,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 48px;display:flex;gap:0;overflow-x:auto;}
+.sticky-nav a{display:flex;align-items:center;gap:6px;padding:13px 16px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;font-family:var(--font-mono);}
+.sticky-nav a:hover{color:var(--text);border-color:var(--border2);}
+.sticky-nav a .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+
+/* ── SUMMARY BAR ── */
+.summary-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:20px 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:18px;}
+.sum-item{display:flex;flex-direction:column;gap:3px;}
+.sum-num{font-family:var(--font-head);font-size:22px;font-weight:800;}
+.sum-label{font-size:11px;color:var(--muted);font-family:var(--font-mono);}
+
+/* ── TIER ── */
+.tier{padding:44px 48px;border-bottom:1px solid var(--border);}
+.tier-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:24px;}
+.tier-num{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;padding:4px 10px;border-radius:4px;font-weight:500;flex-shrink:0;margin-top:3px;}
+.tier-info h2{font-family:var(--font-head);font-size:19px;font-weight:700;margin-bottom:3px;}
+.tier-info p{font-size:13px;color:var(--muted);}
+.tier-count{font-family:var(--font-mono);font-size:11px;color:var(--dim);margin-top:14px;}
+
+/* ── CARD GRID ── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:10px;}
+
+/* ── CARD BASE ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 15px;transition:border-color .2s,background .2s,transform .15s;cursor:default;}
+.card:hover{border-color:var(--border2);background:var(--bg3);}
+.card-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.card-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.card-name{font-family:var(--font-head);font-size:13px;font-weight:700;line-height:1.2;}
+.card-desc{font-size:11.5px;color:var(--muted);line-height:1.55;margin-bottom:8px;}
+.card-tools{display:flex;flex-wrap:wrap;gap:4px;}
+.tool-chip{font-family:var(--font-mono);font-size:10px;padding:2px 7px;border-radius:4px;border:1px solid var(--border2);color:var(--muted);white-space:nowrap;}
+.covered{border-color:var(--t2);color:var(--t2);}
+
+/* ── API CARD (clickable) ── */
+.card.has-api{cursor:pointer;border-color:rgba(124,111,224,.25);}
+.card.has-api:hover{border-color:var(--t1);transform:translateY(-2px);background:var(--bg3);}
+.card.has-api .card-name{color:var(--t1);}
+.api-indicator{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:10px;font-family:var(--font-mono);color:var(--t1);background:rgba(124,111,224,.1);border:1px solid rgba(124,111,224,.25);border-radius:4px;padding:2px 8px;}
+.api-indicator::before{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--t1);}
+.no-api-indicator{display:inline-flex;align-items:center;gap:4px;margin-top:8px;font-size:10px;font-family:var(--font-mono);color:var(--muted);background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 8px;}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:720px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;animation:modal-in .2s ease;}
+@keyframes modal-in{from{opacity:0;transform:scale(.96) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
+
+/* ── MODAL HEADER ── */
+.modal-header{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;}
+.modal-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.modal-title{flex:1;}
+.modal-title h3{font-family:var(--font-head);font-size:17px;font-weight:700;margin-bottom:2px;}
+.modal-title p{font-size:12px;color:var(--muted);}
+.modal-close{background:none;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.modal-close:hover{border-color:var(--border2);color:var(--text);}
+
+/* ── MODAL TABS ── */
+.modal-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 24px;}
+.modal-tab{padding:10px 16px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;font-family:var(--font-mono);}
+.modal-tab.active{color:var(--t1);border-color:var(--t1);}
+
+/* ── MODAL BODY ── */
+.modal-body{padding:20px 24px;overflow-y:auto;flex:1;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── PROMPT TEMPLATES ── */
+.prompt-section-title{font-size:11px;font-family:var(--font-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;}
+.prompt-templates{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.prompt-tpl{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:border-color .2s;}
+.prompt-tpl:hover{border-color:var(--t1);}
+.prompt-tpl-label{font-size:11px;font-weight:600;color:var(--t1);margin-bottom:3px;font-family:var(--font-mono);}
+.prompt-tpl-text{font-size:12px;color:var(--muted);line-height:1.5;}
+
+/* ── CHAT UI ── */
+.chat-input-area{margin-top:12px;}
+.chat-input-row{display:flex;gap:8px;margin-top:8px;}
+#chat-textarea{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;color:var(--text);font-family:var(--font-body);font-size:13px;resize:vertical;min-height:80px;outline:none;transition:border-color .2s;line-height:1.6;}
+#chat-textarea:focus{border-color:var(--t1);}
+.send-btn{background:var(--t1);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s;align-self:flex-end;white-space:nowrap;}
+.send-btn:hover{opacity:.85;}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── CHAT MESSAGES ── */
+.chat-messages{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;max-height:280px;overflow-y:auto;}
+.msg{padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.65;}
+.msg-user{background:rgba(124,111,224,.12);border:1px solid rgba(124,111,224,.2);color:var(--text);align-self:flex-end;max-width:85%;}
+.msg-ai{background:var(--bg3);border:1px solid var(--border);color:var(--text);align-self:flex-start;max-width:85%;}
+.msg-ai.loading{color:var(--muted);}
+.msg-label{font-size:10px;font-family:var(--font-mono);margin-bottom:5px;}
+.msg-user .msg-label{color:var(--t1);}
+.msg-ai .msg-label{color:var(--t2);}
+
+/* ── INFO TAB ── */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.info-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;}
+.info-item-label{font-size:10px;font-family:var(--font-mono);color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em;}
+.info-item-val{font-size:13px;color:var(--text);font-weight:500;}
+.link-list{display:flex;flex-direction:column;gap:6px;}
+.ext-link{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:13px;transition:border-color .2s;}
+.ext-link:hover{border-color:var(--t1);color:var(--t1);}
+.ext-link span{font-size:11px;color:var(--muted);margin-left:auto;font-family:var(--font-mono);}
+
+/* ── NO API MODAL ── */
+.no-api-modal-body{padding:24px;text-align:center;}
+.no-api-modal-body h4{font-size:16px;font-weight:700;margin-bottom:8px;}
+.no-api-modal-body p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+
+/* ── KEY WARNING ── */
+.key-warning{background:rgba(224,144,64,.1);border:1px solid rgba(224,144,64,.3);border-radius:8px;padding:10px 14px;font-size:12px;color:#E09040;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+
+/* ── FOOTER ── */
+.footer{padding:28px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.footer p{font-size:11px;color:var(--dim);font-family:var(--font-mono);}
+
+@media(max-width:600px){
+  .hero,.tier{padding:28px 18px;}
+  .sticky-nav{padding:0 14px;}
+  .card-grid{grid-template-columns:1fr 1fr;}
+  .summary-bar,.footer{padding:16px 18px;}
+  #settings-bar{padding:10px 18px;}
+  .prompt-templates{grid-template-columns:1fr;}
+  .info-grid{grid-template-columns:1fr;}
+  .modal{border-radius:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- SETTINGS BAR -->
+<div id="settings-bar">
+  <span class="lbl">// Anthropic API Key</span>
+  <input id="api-key-input" type="password" placeholder="sk-ant-..." autocomplete="off">
+  <button id="save-btn" onclick="saveKey()">บันทึก Key</button>
+  <span id="key-status" class="status-none">ยังไม่ได้ใส่ key</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">// AI Complete Landscape · March 2026</div>
+  <h1>AI มีกี่หมวด<br><span>จริงๆ?</span></h1>
+  <p class="hero-sub">ภาพรวมครบทุกหมวดของ AI ใน 5 ระดับ — card ที่มีไฟสีม่วงสามารถกดใช้งานได้เลยผ่าน Claude API</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num" style="color:var(--t1)">5</span><span class="stat-label">ระดับหลัก</span></div>
+    <div class="stat"><span class="stat-num" style="color:var(--t2)">44</span><span class="stat-label">หมวดย่อย</span></div>
+    <div class="stat"><span class="stat-num" style="color:var(--t3)">10</span><span class="stat-label">tool ใช้งานได้เลย</span></div>
+    <div class="stat"><span class="stat-num" style="color:var(--muted)">150+</span><span class="stat-label">เครื่องมือในตลาด</span></div>
+  </div>
+  <div class="api-badge">⚡ กด card ที่มีไฟสีม่วง → ใช้งานได้เลยผ่าน Claude</div>
+</div>
+
+<!-- NAV -->
+<nav class="sticky-nav">
+  <a href="#t1"><span class="dot" style="background:var(--t1)"></span>Consumer</a>
+  <a href="#t2"><span class="dot" style="background:var(--t2)"></span>Developer</a>
+  <a href="#t3"><span class="dot" style="background:var(--t3)"></span>Specialized</a>
+  <a href="#t4"><span class="dot" style="background:var(--t4)"></span>Infrastructure</a>
+  <a href="#t5"><span class="dot" style="background:var(--t5)"></span>Frontier</a>
+</nav>
+
+<!-- SUMMARY -->
+<div class="summary-bar">
+  <div class="sum-item"><span class="sum-num" style="color:var(--t1)">16</span><span class="sum-label">Consumer AI หมวด</span></div>
+  <div class="sum-item"><span class="sum-num" style="color:var(--t2)">10</span><span class="sum-label">Developer & Business หมวด</span></div>
+  <div class="sum-item"><span class="sum-num" style="color:var(--t3)">8</span><span class="sum-label">Specialized Domain หมวด</span></div>
+  <div class="sum-item"><span class="sum-num" style="color:var(--t4)">6</span><span class="sum-label">Infrastructure หมวด</span></div>
+  <div class="sum-item"><span class="sum-num" style="color:var(--t5)">6</span><span class="sum-label">Frontier Research หมวด</span></div>
+</div>
+
+<!-- ════ TIER 1 ════ -->
+<div class="tier" id="t1">
+  <div class="tier-header">
+    <span class="tier-num" style="background:var(--t1l);color:var(--t1)">TIER 1</span>
+    <div class="tier-info">
+      <h2 style="color:var(--t1)">Consumer AI — ใช้ได้ทันที ไม่ต้องมี tech background</h2>
+      <p>เครื่องมือที่ผู้ใช้ทั่วไปเข้าถึงได้ผ่าน web หรือ app · 16 หมวด</p>
+    </div>
+  </div>
+  <div class="card-grid">
+
+    <div class="card has-api" onclick="openModal('chat')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t1l)">💬</div><div class="card-name">AI Chat / ผู้ช่วย</div></div>
+      <div class="card-desc">ถาม-ตอบ คิด วิเคราะห์ เขียน วางแผน ใช้งานได้ทุกอย่าง</div>
+      <div class="card-tools"><span class="tool-chip covered">Claude</span><span class="tool-chip">ChatGPT</span><span class="tool-chip">Gemini</span><span class="tool-chip">Grok</span></div>
+      <div class="api-indicator">ใช้งานได้เลย</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('search')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t1l)">🔍</div><div class="card-name">AI Search</div></div>
+      <div class="card-desc">ค้นหาข้อมูล real-time อ้างอิงแหล่งที่มา สรุปเว็บ</div>
+      <div class="card-tools"><span class="tool-chip covered">Perplexity</span><span class="tool-chip covered">ChatGPT Search</span><span class="tool-chip">Gemini</span></div>
+      <div class="api-indicator">ใช้งานได้เลย</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('image')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t1l)">🎨</div><div class="card-name">สร้างภาพ</div></div>
+      <div class="card-desc">สร้างภาพจาก text, concept art, โลโก้, ภาพโฆษณา</div>
+      <div class="card-tools"><span class="tool-chip">Midjourney</span><span class="tool-chip">Flux</span><span class="tool-chip">DALL-E 3</span><span class="tool-chip">Firefly</span></div>
+      <div class="api-indicator">Claude ช่วย prompt</div>
+    </div>
+
+    <div class="card" onclick="openNoApi('สร้างวิดีโอ','🎬','Runway, Sora, Kling AI ยังไม่มี public API','https://runwayml.com,https://openai.com/sora,https://klingai.com')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t1l)">🎬</div><div class="card-name">สร้างวิดีโอ</div></div>
+      <div class="card-desc">แปลง text/ภาพเป็นวิดีโอ, animation, short film</div>
+      <div class="card-tools"><span class="tool-chip">Runway</span><span class="tool-chip">Sora</span><span class="tool-chip">Kling AI</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('voice')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t1l)">🔊</div><div class="card-name">Voice / เสียง</div></div>
+      <div class="card-desc">สร้างเสียง voiceover, podcast, audiobook, clone เสียง</div>
+      <div class="card-tools"><span class="tool-chip covered">ElevenLabs</span><span class="tool-chip">HeyGen</span><span class="tool-chip">Murf</span></div>
+      <div class="api-indicator">Claude + prompt script</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('docs')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t1l)">📄</div><div class="card-name">Productivity / Docs</div></div>
+      <div class="card-desc">เขียนรายงาน สรุปประชุม จัดการเอกสาร workspace AI</div>
+      <div class="card-tools"><span class="tool-chip covered">Notion AI</span><span class="tool-chip covered">MS Copilot</span><span class="tool-chip covered">NotebookLM</span></div>
+      <div class="api-indicator">ใช้งานได้เลย</div>
+    </div>
+
+    <div class="card" onclick="openNoApi('สร้างดนตรี','🎵','Suno/Udio ยังไม่มี public API — ไปใช้บนเว็บได้เลย','https://suno.com,https://udio.com')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(124,111,224,.15)">🎵</div><div class="card-name">สร้างดนตรี</div></div>
+      <div class="card-desc">สร้างเพลงเต็มเพลง, beat, BGM จาก text prompt ได้ใน 30 วินาที</div>
+      <div class="card-tools"><span class="tool-chip">Suno</span><span class="tool-chip">Udio</span><span class="tool-chip">Musicfy</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+
+    <div class="card" onclick="openNoApi('Avatar / Digital Human','👤','HeyGen มี API แต่ราคาสูง — ใช้บนเว็บก่อน','https://heygen.com,https://d-id.com,https://synthesia.io')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(124,111,224,.15)">👤</div><div class="card-name">Avatar / Digital Human</div></div>
+      <div class="card-desc">สร้างคนพูดวิดีโอ avatar presenter จาก script ใช้แทนการถ่ายจริง</div>
+      <div class="card-tools"><span class="tool-chip">HeyGen</span><span class="tool-chip">D-ID</span><span class="tool-chip">Synthesia</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('presentation')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(124,111,224,.15)">📊</div><div class="card-name">Presentation / Slides</div></div>
+      <div class="card-desc">สร้าง slide deck สวยงามจาก prompt หรือเอกสาร ไม่ต้องออกแบบเอง</div>
+      <div class="card-tools"><span class="tool-chip">Gamma</span><span class="tool-chip">Tome</span><span class="tool-chip">Beautiful.ai</span></div>
+      <div class="api-indicator">Claude สร้าง outline</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('translate')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(124,111,224,.15)">🌐</div><div class="card-name">แปลภาษา</div></div>
+      <div class="card-desc">แปลภาษาแม่นยำสูง รองรับ 100+ ภาษา บริบทธุรกิจและเทคนิค</div>
+      <div class="card-tools"><span class="tool-chip">DeepL</span><span class="tool-chip">Google Translate AI</span><span class="tool-chip">Claude</span></div>
+      <div class="api-indicator">ใช้งานได้เลย</div>
+    </div>
+
+    <div class="card" onclick="openNoApi('AI Gaming','🎮','เครื่องมือ AI Gaming ส่วนใหญ่เป็น B2B ไม่มี consumer API','https://inworld.ai,https://scenario.com')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(124,111,224,.15)">🎮</div><div class="card-name">AI Gaming</div></div>
+      <div class="card-desc">สร้าง NPC ฉลาด, procedural content, level design อัตโนมัติ</div>
+      <div class="card-tools"><span class="tool-chip">Inworld AI</span><span class="tool-chip">Scenario</span><span class="tool-chip">Charisma</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('health')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(124,111,224,.15)">🏋️</div><div class="card-name">Health & Fitness AI</div></div>
+      <div class="card-desc">แผนออกกำลังกาย โภชนาการ ติดตามสุขภาพส่วนบุคคล</div>
+      <div class="card-tools"><span class="tool-chip">Whoop AI</span><span class="tool-chip">Noom</span><span class="tool-chip">Freeletics</span></div>
+      <div class="api-indicator">Claude วางแผนให้</div>
+    </div>
+
+    <div class="card" onclick="openNoApi('Shopping AI','🛒','Amazon/Shopify AI เป็น built-in ใน platform ไม่มี standalone API','https://amazon.com,https://shopify.com')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(124,111,224,.15)">🛒</div><div class="card-name">Shopping / Recommendation</div></div>
+      <div class="card-desc">แนะนำสินค้า personalized ตามพฤติกรรม ช่วยตัดสินใจซื้อ</div>
+      <div class="card-tools"><span class="tool-chip">Amazon AI</span><span class="tool-chip">Shopify AI</span><span class="tool-chip">Walmart AI</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('travel')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(124,111,224,.15)">✈️</div><div class="card-name">Travel AI</div></div>
+      <div class="card-desc">วางแผนท่องเที่ยว จอง ค้นหาราคา แนะนำที่พัก กิจกรรม</div>
+      <div class="card-tools"><span class="tool-chip">Kayak AI</span><span class="tool-chip">Roam Around</span><span class="tool-chip">Layla</span></div>
+      <div class="api-indicator">Claude วางแผนให้</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('mental')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(124,111,224,.15)">🧘</div><div class="card-name">Mental Health AI</div></div>
+      <div class="card-desc">คุยระบาย ลด stress CBT therapy companion ดูแลสุขภาพจิต</div>
+      <div class="card-tools"><span class="tool-chip">Woebot</span><span class="tool-chip">Wysa</span><span class="tool-chip">Replika</span></div>
+      <div class="api-indicator">Claude พูดคุยได้</div>
+    </div>
+
+    <div class="card" onclick="openNoApi('Photo Editing AI','📸','Adobe Firefly ต้องใช้ผ่าน Creative Cloud — ไม่มี free public API','https://firefly.adobe.com,https://canva.com,https://remove.bg')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(124,111,224,.15)">📸</div><div class="card-name">Photo Editing AI</div></div>
+      <div class="card-desc">ตัดพื้นหลัง retouching upscale remove object ใน 1 คลิก</div>
+      <div class="card-tools"><span class="tool-chip">Adobe Firefly</span><span class="tool-chip">Canva AI</span><span class="tool-chip">Remove.bg</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+
+  </div>
+  <div class="tier-count">// 16 หมวด · ใช้งานได้ทันทีผ่าน browser หรือ app · ไม่ต้องมีความรู้เทคนิค · ส่วนใหญ่มีแผนฟรี</div>
+</div>
+
+<!-- ════ TIER 2 ════ -->
+<div class="tier" id="t2">
+  <div class="tier-header">
+    <span class="tier-num" style="background:var(--t2l);color:var(--t2)">TIER 2</span>
+    <div class="tier-info">
+      <h2 style="color:var(--t2)">Developer & Business AI — ใช้ในองค์กรและพัฒนา software</h2>
+      <p>ต้องการความรู้เพิ่มเติมหรือ account ระดับ business · 10 หมวด</p>
+    </div>
+  </div>
+  <div class="card-grid">
+
+    <div class="card has-api" onclick="openModal('coding')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t2l)">💻</div><div class="card-name">AI Coding</div></div>
+      <div class="card-desc">เขียนโค้ด debug refactor review ใน IDE หรือ terminal</div>
+      <div class="card-tools"><span class="tool-chip covered">Cursor</span><span class="tool-chip covered">Claude Code</span><span class="tool-chip covered">Copilot</span></div>
+      <div class="api-indicator">ใช้งานได้เลย</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('automation')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t2l)">⚙️</div><div class="card-name">Automation</div></div>
+      <div class="card-desc">เชื่อมระบบ ทำ workflow อัตโนมัติ no-code ถึง full-code</div>
+      <div class="card-tools"><span class="tool-chip covered">Zapier</span><span class="tool-chip covered">Make.com</span><span class="tool-chip covered">n8n</span></div>
+      <div class="api-indicator">Claude ออกแบบ flow</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('agent')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t2l)">🤖</div><div class="card-name">AI Agent</div></div>
+      <div class="card-desc">AI ที่ลงมือทำงานแทนได้จริง Think→Plan→Act→Report</div>
+      <div class="card-tools"><span class="tool-chip covered">Claude Code</span><span class="tool-chip covered">Devin</span><span class="tool-chip">Operator</span></div>
+      <div class="api-indicator">ใช้งานได้เลย</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('data')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(61,175,130,.12)">📈</div><div class="card-name">Data Analytics AI</div></div>
+      <div class="card-desc">วิเคราะห์ข้อมูล สร้างกราฟ หา insight จาก dataset ด้วย natural language</div>
+      <div class="card-tools"><span class="tool-chip">Julius AI</span><span class="tool-chip">Hex AI</span><span class="tool-chip">Tableau AI</span></div>
+      <div class="api-indicator">Claude วิเคราะห์ให้</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('marketing')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(61,175,130,.12)">🎯</div><div class="card-name">Marketing / SEO AI</div></div>
+      <div class="card-desc">เขียน copy โฆษณา SEO content strategy A/B testing</div>
+      <div class="card-tools"><span class="tool-chip">Jasper</span><span class="tool-chip">Surfer SEO</span><span class="tool-chip">Copy.ai</span></div>
+      <div class="api-indicator">ใช้งานได้เลย</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('customer')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(61,175,130,.12)">💬</div><div class="card-name">Customer Service AI</div></div>
+      <div class="card-desc">chatbot ตอบลูกค้า ticket routing สรุป call center</div>
+      <div class="card-tools"><span class="tool-chip">Intercom AI</span><span class="tool-chip">Zendesk AI</span><span class="tool-chip">Freshdesk AI</span></div>
+      <div class="api-indicator">Claude สร้าง script</div>
+    </div>
+
+    <div class="card" onclick="openNoApi('Cybersecurity AI','🛡️','Darktrace/CrowdStrike เป็น enterprise B2B ไม่มี consumer API','https://darktrace.com,https://crowdstrike.com')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(61,175,130,.12)">🛡️</div><div class="card-name">Cybersecurity AI</div></div>
+      <div class="card-desc">ตรวจจับ threat anomaly detection incident response</div>
+      <div class="card-tools"><span class="tool-chip">Darktrace</span><span class="tool-chip">CrowdStrike AI</span><span class="tool-chip">Vectra</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('hr')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(61,175,130,.12)">👥</div><div class="card-name">HR / Recruiting AI</div></div>
+      <div class="card-desc">คัดเรซูเม่ สัมภาษณ์เบื้องต้น onboarding performance review</div>
+      <div class="card-tools"><span class="tool-chip">Workday AI</span><span class="tool-chip">HireVue</span><span class="tool-chip">Eightfold</span></div>
+      <div class="api-indicator">Claude ช่วย HR tasks</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('finance')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(61,175,130,.12)">💰</div><div class="card-name">Finance AI</div></div>
+      <div class="card-desc">วิเคราะห์ตลาด ตรวจจับ fraud พยากรณ์ risk financial modeling</div>
+      <div class="card-tools"><span class="tool-chip">Bloomberg GPT</span><span class="tool-chip">Kensho</span><span class="tool-chip">FinChat</span></div>
+      <div class="api-indicator">Claude วิเคราะห์ได้</div>
+    </div>
+
+    <div class="card has-api" onclick="openModal('legal')">
+      <div class="card-head"><div class="card-icon" style="background:rgba(61,175,130,.12)">⚖️</div><div class="card-name">Legal AI</div></div>
+      <div class="card-desc">ร่างสัญญา วิเคราะห์เอกสารกฎหมาย research คดี due diligence</div>
+      <div class="card-tools"><span class="tool-chip">Harvey AI</span><span class="tool-chip">CoCounsel</span><span class="tool-chip">Luminance</span></div>
+      <div class="api-indicator">Claude ช่วยงาน legal</div>
+    </div>
+
+  </div>
+  <div class="tier-count">// 10 หมวด · ต้องการ account ระดับ business หรือ API key · เหมาะกับทีมและองค์กร · ROI วัดได้ชัด</div>
+</div>
+
+<!-- ════ TIER 3 ════ -->
+<div class="tier" id="t3">
+  <div class="tier-header">
+    <span class="tier-num" style="background:var(--t3l);color:var(--t3)">TIER 3</span>
+    <div class="tier-info">
+      <h2 style="color:var(--t3)">Specialized Domain AI — AI เฉพาะอุตสาหกรรม</h2>
+      <p>ต้องการ domain expertise ลึก · 8 หมวด</p>
+    </div>
+  </div>
+  <div class="card-grid">
+    <div class="card" onclick="openNoApi('Healthcare AI','🏥','Med-PaLM/BioGPT เป็น research system ปิด ไม่มี consumer API','https://cloud.google.com/blog/topics/healthcare-life-sciences')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t3l)">🏥</div><div class="card-name">Healthcare AI</div></div>
+      <div class="card-desc">วินิจฉัยโรคจากภาพ X-ray/MRI แนะนำการรักษา ค้นหายา clinical notes</div>
+      <div class="card-tools"><span class="tool-chip">Med-PaLM 2</span><span class="tool-chip">BioGPT</span><span class="tool-chip">Ambience AI</span><span class="tool-chip">PathAI</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+    <div class="card has-api" onclick="openModal('education')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t3l)">🎓</div><div class="card-name">Education AI</div></div>
+      <div class="card-desc">tutor ส่วนตัว adaptive learning สร้างแบบทดสอบ ตอบคำถามนักเรียน</div>
+      <div class="card-tools"><span class="tool-chip">Khanmigo</span><span class="tool-chip">Duolingo Max</span><span class="tool-chip">Synthesis AI</span></div>
+      <div class="api-indicator">Claude เป็น tutor ได้</div>
+    </div>
+    <div class="card" onclick="openNoApi('Science Research AI','🔬','AlphaFold/Galactica เป็น research tool ต้องสมัครใช้แยก','https://alphafold.ebi.ac.uk,https://consensus.app')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t3l)">🔬</div><div class="card-name">Science Research AI</div></div>
+      <div class="card-desc">พับโปรตีน ค้นพบยาใหม่ วิเคราะห์ข้อมูลวิทยาศาสตร์</div>
+      <div class="card-tools"><span class="tool-chip">AlphaFold 3</span><span class="tool-chip">Galactica</span><span class="tool-chip">Elicit</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+    <div class="card" onclick="openNoApi('Autonomous Vehicle','🚗','Tesla FSD/Waymo เป็น closed system ไม่มี API สำหรับผู้ใช้ทั่วไป','https://waymo.com,https://tesla.com/autopilot')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t3l)">🚗</div><div class="card-name">Autonomous Vehicle</div></div>
+      <div class="card-desc">ขับรถเองได้ perception planning control ไม่ต้องมีคนขับ</div>
+      <div class="card-tools"><span class="tool-chip">Tesla FSD</span><span class="tool-chip">Waymo</span><span class="tool-chip">Mobileye</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+    <div class="card" onclick="openNoApi('Robotics AI','🦾','Boston Dynamics/Figure เป็น hardware+software ไม่มี API ทั่วไป','https://bostondynamics.com,https://figure.ai')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t3l)">🦾</div><div class="card-name">Robotics AI</div></div>
+      <div class="card-desc">หุ่นยนต์ที่เรียนรู้การเคลื่อนที่ จับของ ทำงานโรงงาน</div>
+      <div class="card-tools"><span class="tool-chip">Figure 02</span><span class="tool-chip">Boston Dynamics</span><span class="tool-chip">1X (NEO)</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+    <div class="card has-api" onclick="openModal('architecture')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t3l)">🏗️</div><div class="card-name">Architecture / CAD AI</div></div>
+      <div class="card-desc">ออกแบบอาคาร โครงสร้าง floor plan generative design</div>
+      <div class="card-tools"><span class="tool-chip">Spacemaker</span><span class="tool-chip">Autodesk AI</span><span class="tool-chip">Archistar</span></div>
+      <div class="api-indicator">Claude ช่วยออกแบบ</div>
+    </div>
+    <div class="card has-api" onclick="openModal('climate')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t3l)">🌿</div><div class="card-name">Climate / Agriculture AI</div></div>
+      <div class="card-desc">พยากรณ์สภาพอากาศแม่น วิเคราะห์ดิน ดูแลพืช precision farming</div>
+      <div class="card-tools"><span class="tool-chip">ClimateAI</span><span class="tool-chip">Prospera</span><span class="tool-chip">IBM PAIRS</span></div>
+      <div class="api-indicator">Claude วิเคราะห์ข้อมูล</div>
+    </div>
+    <div class="card" onclick="openNoApi('Energy / Industrial AI','⚡','C3.ai/Siemens AI เป็น enterprise platform ต้องสัญญาระยะยาว','https://c3.ai,https://siemens.com/global/en/products/automation/topic-areas/artificial-intelligence.html')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t3l)">⚡</div><div class="card-name">Energy / Industrial AI</div></div>
+      <div class="card-desc">optimize grid พลังงาน predictive maintenance โรงงาน</div>
+      <div class="card-tools"><span class="tool-chip">Uptake</span><span class="tool-chip">C3.ai</span><span class="tool-chip">Siemens AI</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+  </div>
+  <div class="tier-count">// 8 หมวด · แต่ละหมวดเป็นอุตสาหกรรมขนาดใหญ่</div>
+</div>
+
+<!-- ════ TIER 4 ════ -->
+<div class="tier" id="t4">
+  <div class="tier-header">
+    <span class="tier-num" style="background:var(--t4l);color:var(--t4)">TIER 4</span>
+    <div class="tier-info">
+      <h2 style="color:var(--t4)">AI Infrastructure & Platform — ชั้น foundation ที่ทุกอย่างวางอยู่บน</h2>
+      <p>Developer และ data engineer ใช้สร้าง AI products · 6 หมวด</p>
+    </div>
+  </div>
+  <div class="card-grid">
+    <div class="card has-api" onclick="openModal('cloud')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t4l)">☁️</div><div class="card-name">Cloud AI Platform</div></div>
+      <div class="card-desc">บริการ AI ครบวงจรบน cloud train/deploy/scale model</div>
+      <div class="card-tools"><span class="tool-chip">AWS SageMaker</span><span class="tool-chip">Azure ML</span><span class="tool-chip">Vertex AI</span></div>
+      <div class="api-indicator">Claude แนะนำ setup</div>
+    </div>
+    <div class="card has-api" onclick="openModal('llmapi')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t4l)">🔌</div><div class="card-name">LLM APIs</div></div>
+      <div class="card-desc">เรียกใช้ AI model ผ่าน API ฝัง AI ใน application ตัวเอง</div>
+      <div class="card-tools"><span class="tool-chip">Anthropic API</span><span class="tool-chip">OpenAI API</span><span class="tool-chip">Groq</span></div>
+      <div class="api-indicator">ใช้งานได้เลย</div>
+    </div>
+    <div class="card has-api" onclick="openModal('vectordb')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t4l)">🗄️</div><div class="card-name">Vector Database</div></div>
+      <div class="card-desc">เก็บ embedding สำหรับ RAG semantic search ทำให้ AI จำข้อมูลได้</div>
+      <div class="card-tools"><span class="tool-chip">Pinecone</span><span class="tool-chip">Weaviate</span><span class="tool-chip">Chroma</span></div>
+      <div class="api-indicator">Claude อธิบาย + code</div>
+    </div>
+    <div class="card has-api" onclick="openModal('observability')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t4l)">🔍</div><div class="card-name">AI Observability</div></div>
+      <div class="card-desc">monitor model performance, trace AI calls, evaluate quality</div>
+      <div class="card-tools"><span class="tool-chip">LangSmith</span><span class="tool-chip">Weights & Biases</span><span class="tool-chip">Arize AI</span></div>
+      <div class="api-indicator">Claude แนะนำ setup</div>
+    </div>
+    <div class="card has-api" onclick="openModal('opensource')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t4l)">🧩</div><div class="card-name">Open Source LLM</div></div>
+      <div class="card-desc">รัน model เองบน server ควบคุม privacy เต็มที่ fine-tune ได้</div>
+      <div class="card-tools"><span class="tool-chip">Llama 3.3</span><span class="tool-chip">Mistral</span><span class="tool-chip">Deepseek</span></div>
+      <div class="api-indicator">Claude แนะนำ + code</div>
+    </div>
+    <div class="card has-api" onclick="openModal('orchestration')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t4l)">🔗</div><div class="card-name">AI Orchestration</div></div>
+      <div class="card-desc">เชื่อม AI หลายตัว สร้าง pipeline complex workflow multi-agent</div>
+      <div class="card-tools"><span class="tool-chip">LangChain</span><span class="tool-chip">LlamaIndex</span><span class="tool-chip">CrewAI</span></div>
+      <div class="api-indicator">Claude เขียน code ให้</div>
+    </div>
+  </div>
+  <div class="tier-count">// 6 หมวด · เป็น backbone ของ AI products ทั้งหมดที่มีในโลก</div>
+</div>
+
+<!-- ════ TIER 5 ════ -->
+<div class="tier" id="t5">
+  <div class="tier-header">
+    <span class="tier-num" style="background:var(--t5l);color:var(--t5)">TIER 5</span>
+    <div class="tier-info">
+      <h2 style="color:var(--t5)">Frontier AI Research — cutting-edge ที่กำลังเปลี่ยนโลก</h2>
+      <p>งานวิจัยที่ยังอยู่ในขั้น research หรือเพิ่งออกมา · 6 หมวด</p>
+    </div>
+  </div>
+  <div class="card-grid">
+    <div class="card has-api" onclick="openModal('agi')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t5l)">🧠</div><div class="card-name">AGI Research</div></div>
+      <div class="card-desc">วิจัยสู่ AI ที่ฉลาดเท่าหรือเหนือมนุษย์ในทุกด้าน</div>
+      <div class="card-tools"><span class="tool-chip">OpenAI</span><span class="tool-chip">Anthropic</span><span class="tool-chip">DeepMind</span></div>
+      <div class="api-indicator">Claude อธิบาย</div>
+    </div>
+    <div class="card has-api" onclick="openModal('multimodal')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t5l)">👁️</div><div class="card-name">Multimodal AI</div></div>
+      <div class="card-desc">AI ที่รับและเข้าใจทุก modality พร้อมกัน text ภาพ เสียง วิดีโอ</div>
+      <div class="card-tools"><span class="tool-chip">GPT-4o</span><span class="tool-chip">Gemini Ultra</span><span class="tool-chip">Claude 3.5</span></div>
+      <div class="api-indicator">ใช้งานได้เลย</div>
+    </div>
+    <div class="card has-api" onclick="openModal('reasoning')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t5l)">💡</div><div class="card-name">Reasoning Models</div></div>
+      <div class="card-desc">AI ที่คิดลึกก่อนตอบ chain-of-thought แม่นมากในคณิตศาสตร์</div>
+      <div class="card-tools"><span class="tool-chip">o3 (OpenAI)</span><span class="tool-chip">Claude Opus</span><span class="tool-chip">Gemini Thinking</span></div>
+      <div class="api-indicator">Claude อธิบาย</div>
+    </div>
+    <div class="card" onclick="openNoApi('Embodied AI','🦿','Figure/Tesla Optimus เป็น hardware ไม่มี API ทั่วไป','https://figure.ai,https://tesla.com/optimus')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t5l)">🦿</div><div class="card-name">Embodied AI</div></div>
+      <div class="card-desc">AI ที่มีร่างกาย เรียนรู้จากโลกจริง หยิบของ เดิน โต้ตอบ</div>
+      <div class="card-tools"><span class="tool-chip">Figure 02</span><span class="tool-chip">1X NEO</span><span class="tool-chip">Tesla Optimus</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+    <div class="card has-api" onclick="openModal('safety')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t5l)">🔒</div><div class="card-name">AI Safety & Alignment</div></div>
+      <div class="card-desc">ทำให้ AI ปลอดภัย ทำตามเจตนาของมนุษย์ ป้องกัน AI เป็นอันตราย</div>
+      <div class="card-tools"><span class="tool-chip">Anthropic Safety</span><span class="tool-chip">ARC Evals</span><span class="tool-chip">Redwood Research</span></div>
+      <div class="api-indicator">Claude อธิบาย</div>
+    </div>
+    <div class="card" onclick="openNoApi('AI + Quantum','⚛️','Quantum AI ยังเป็น research lab ไม่มี consumer access','https://quantumai.google,https://quantum.ibm.com')">
+      <div class="card-head"><div class="card-icon" style="background:var(--t5l)">⚛️</div><div class="card-name">AI + Quantum</div></div>
+      <div class="card-desc">รวม quantum computing กับ AI เพิ่ม computing power</div>
+      <div class="card-tools"><span class="tool-chip">Google Quantum AI</span><span class="tool-chip">IBM Quantum</span><span class="tool-chip">Azure Quantum</span></div>
+      <div class="no-api-indicator">เปิดเว็บ tool ได้เลย</div>
+    </div>
+  </div>
+  <div class="tier-count">// 6 หมวด · ส่วนใหญ่ยังเป็น research · บางอย่างจะ mainstream ใน 3–5 ปี</div>
+</div>
+
+<div class="footer">
+  <p>// AI Complete Landscape · 44 หมวด · 5 ระดับ · March 2026</p>
+  <p>// สร้างโดย Claude Sonnet 4.6 · Anthropic</p>
+</div>
+
+<!-- ════ MODAL: API TOOLS ════ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeOnOverlay(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-header">
+      <div class="modal-icon" id="modal-icon">💬</div>
+      <div class="modal-title">
+        <h3 id="modal-title">AI Chat</h3>
+        <p id="modal-subtitle">Claude-powered · ใส่ API key ใน settings bar</p>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-tabs">
+      <div class="modal-tab active" onclick="switchTab('use',this)">ใช้งาน</div>
+      <div class="modal-tab" onclick="switchTab('prompts',this)">Prompt Templates</div>
+      <div class="modal-tab" onclick="switchTab('info',this)">ข้อมูล Tool</div>
+    </div>
+    <div class="modal-body">
+
+      <!-- USE TAB -->
+      <div class="tab-panel active" id="tab-use">
+        <div id="key-warn" class="key-warning" style="display:none">⚠ ยังไม่ได้ใส่ Anthropic API key — ใส่ใน settings bar ด้านบน แล้วกด "บันทึก Key"</div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-input-area">
+          <textarea id="chat-textarea" placeholder="พิมพ์คำถามหรือ prompt ที่นี่..."></textarea>
+          <div class="chat-input-row">
+            <button class="send-btn" id="send-btn" onclick="sendMessage()">ส่ง →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROMPTS TAB -->
+      <div class="tab-panel" id="tab-prompts">
+        <div class="prompt-section-title">เลือก template แล้วแก้ไขได้</div>
+        <div class="prompt-templates" id="prompt-templates-grid"></div>
+      </div>
+
+      <!-- INFO TAB -->
+      <div class="tab-panel" id="tab-info">
+        <div class="info-grid" id="info-grid"></div>
+        <div class="prompt-section-title" style="margin-top:4px">ลิงก์ tool หลัก</div>
+        <div class="link-list" id="link-list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL: NO API TOOLS ════ -->
+<div class="modal-overlay" id="noapi-overlay" onclick="closeNoApiOnOverlay(event)">
+  <div class="modal" id="noapi-box" style="max-width:460px">
+    <div class="modal-header">
+      <div class="modal-icon" id="noapi-icon">🔗</div>
+      <div class="modal-title">
+        <h3 id="noapi-title">Tool</h3>
+        <p id="noapi-sub">ไม่มี public API · เปิดใช้งานผ่านเว็บได้เลย</p>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('noapi-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="no-api-modal-body">
+        <p id="noapi-reason"></p>
+        <div class="link-list" id="noapi-links"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── KEY MANAGEMENT ──
+function saveKey(){
+  const v=document.getElementById('api-key-input').value.trim();
+  if(!v){alert('กรุณาใส่ API key ก่อน');return;}
+  localStorage.setItem('anthropic_key',v);
+  updateKeyStatus();
+  document.getElementById('api-key-input').value='';
+}
+function getKey(){return localStorage.getItem('anthropic_key')||'';}
+function updateKeyStatus(){
+  const k=getKey();
+  const el=document.getElementById('key-status');
+  if(k){el.textContent='✓ API key พร้อมใช้งาน';el.className='status-ok';}
+  else{el.textContent='ยังไม่ได้ใส่ key';el.className='status-none';}
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  updateKeyStatus();
+  const saved=getKey();
+  if(saved)document.getElementById('api-key-input').placeholder='••••••• (บันทึกแล้ว)';
+  document.getElementById('api-key-input').addEventListener('keydown',e=>{if(e.key==='Enter')saveKey();});
+});
+
+// ── TAB SWITCH ──
+function switchTab(id,el){
+  document.querySelectorAll('.modal-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+// ── MODAL DATA ──
+const TOOLS = {
+  chat:{icon:'💬',title:'AI Chat / ผู้ช่วย',subtitle:'Claude-powered · ถาม-ตอบ วิเคราะห์ เขียน วางแผน',
+    system:'คุณคือผู้ช่วย AI ที่ฉลาด ตอบเป็นภาษาไทยได้ดี ตอบให้ตรงประเด็น ชัดเจน และมีประโยชน์',
+    prompts:[
+      {label:'เขียนบทความ',text:'เขียนบทความเกี่ยวกับ [หัวข้อ] ความยาว 500 คำ สำหรับผู้อ่านทั่วไป มีโครงสร้างชัดเจน'},
+      {label:'สรุปข้อมูล',text:'สรุปประเด็นหลัก 5 ข้อจากเนื้อหาต่อไปนี้:\n\n[วางเนื้อหาที่นี่]'},
+      {label:'วิเคราะห์ปัญหา',text:'ช่วยวิเคราะห์ปัญหานี้และแนะนำแนวทางแก้ไข 3 วิธี:\n\n[อธิบายปัญหา]'},
+      {label:'วางแผนธุรกิจ',text:'ช่วยวางแผนธุรกิจสำหรับ [ประเภทธุรกิจ] เบื้องต้น ครอบคลุม target market, value proposition, revenue model'}
+    ],
+    info:{ราคา:'ฟรี / Claude Pro $20/เดือน',ความเร็ว:'1-5 วินาที',ภาษา:'ไทย, English 100+ ภาษา',ข้อจำกัด:'Rate limit ตาม plan'},
+    links:[{name:'Claude.ai',url:'https://claude.ai'},{name:'ChatGPT',url:'https://chatgpt.com'},{name:'Gemini',url:'https://gemini.google.com'}]},
+
+  search:{icon:'🔍',title:'AI Search',subtitle:'ค้นหาข้อมูล real-time พร้อมอ้างอิงแหล่งที่มา',
+    system:'คุณคือผู้เชี่ยวชาญด้านการค้นหาและวิเคราะห์ข้อมูล ช่วยหาคำตอบพร้อมอธิบายว่าควรค้นหาจากแหล่งไหน และให้ข้อมูลที่ละเอียดและมีประโยชน์',
+    prompts:[
+      {label:'ค้นหาข้อมูล',text:'ช่วยค้นหาและสรุปข้อมูลเกี่ยวกับ [หัวข้อ] รวมถึงแหล่งที่มาที่น่าเชื่อถือ'},
+      {label:'เปรียบเทียบ',text:'เปรียบเทียบ [A] กับ [B] ในด้าน ราคา คุณสมบัติ ข้อดี-ข้อเสีย'},
+      {label:'ข่าวล่าสุด',text:'สรุปความเคลื่อนไหวล่าสุดในวงการ [อุตสาหกรรม/หัวข้อ] ในปี 2025-2026'},
+      {label:'Research',text:'ช่วยทำ research เบื้องต้นเกี่ยวกับ [หัวข้อ] รวมถึงสถิติสำคัญและแหล่งข้อมูลหลัก'}
+    ],
+    info:{แนะนำใช้:'Perplexity AI (real-time)',ราคา:'Perplexity ฟรี / $20/เดือน',จุดเด่น:'อ้างอิงแหล่งที่มาทุกข้อ',เหมาะกับ:'Research, fact-checking'},
+    links:[{name:'Perplexity AI',url:'https://perplexity.ai'},{name:'ChatGPT Search',url:'https://chatgpt.com'},{name:'Gemini',url:'https://gemini.google.com'}]},
+
+  image:{icon:'🎨',title:'สร้างภาพ AI',subtitle:'Claude ช่วย craft prompt สำหรับ Midjourney / DALL-E / Flux',
+    system:'คุณคือผู้เชี่ยวชาญด้าน AI image generation ที่รู้ prompt engineering เชิงลึก ช่วยเขียน prompt ที่ละเอียดและได้ผลลัพธ์ดีสำหรับ Midjourney, DALL-E 3, Flux และ Stable Diffusion',
+    prompts:[
+      {label:'โลโก้',text:'ช่วยเขียน prompt สำหรับสร้างโลโก้ของ [ชื่อบริษัท] ธุรกิจ [ประเภท] สไตล์ minimal modern'},
+      {label:'ภาพโฆษณา',text:'เขียน Midjourney prompt สำหรับภาพโฆษณา [สินค้า] ที่ดูหรูหรา มีสีหลัก [สี] เหมาะกับ Instagram'},
+      {label:'Portrait',text:'สร้าง DALL-E prompt สำหรับภาพ portrait แนว [สไตล์] บรรยากาศ [mood] แสง [ประเภทแสง]'},
+      {label:'แปลงไอเดีย',text:'ฉันอยากได้ภาพ: [อธิบายภาพที่ต้องการ]\n\nช่วยแปลงเป็น prompt สำหรับ Midjourney ที่ละเอียดและได้ผลลัพธ์ดี'}
+    ],
+    info:{แนะนำ:'Midjourney สวยสุด / DALL-E สะดวกสุด',ราคา:'Midjourney $10/เดือน · DALL-E รวมใน Plus',ไม่มี:'Public API ฟรีสำหรับ Midjourney',ทางเลือก:'Stability AI API มี free tier'},
+    links:[{name:'Midjourney',url:'https://midjourney.com'},{name:'DALL-E (ChatGPT)',url:'https://chatgpt.com'},{name:'Stability AI',url:'https://stability.ai'},{name:'Flux on Replicate',url:'https://replicate.com/black-forest-labs/flux-schnell'}]},
+
+  voice:{icon:'🔊',title:'Voice / เสียง AI',subtitle:'Claude เขียน voice script พร้อม prompt สำหรับ ElevenLabs',
+    system:'คุณคือผู้เชี่ยวชาญด้าน voice production และ AI speech ช่วยเขียน script สำหรับ voiceover podcast และแนะนำวิธีใช้ ElevenLabs/HeyGen อย่างมืออาชีพ',
+    prompts:[
+      {label:'Script Voiceover',text:'เขียน script voiceover สำหรับ [ประเภทเนื้อหา] ความยาว [วินาที] วินาที น้ำเสียง [formal/casual/energetic] เนื้อหาเกี่ยวกับ [หัวข้อ]'},
+      {label:'Podcast Intro',text:'เขียน script intro podcast ชื่อ "[ชื่อ podcast]" เกี่ยวกับ [หัวข้อ] ความยาว 30 วินาที ดึงดูดและน่าสนใจ'},
+      {label:'ElevenLabs Prompt',text:'ช่วยแนะนำ settings ที่ดีที่สุดสำหรับ ElevenLabs เพื่อสร้างเสียง [ประเภท: narrator/news/character] สำหรับ [ประเภทงาน]'},
+      {label:'สรุปเนื้อหา',text:'แปลงเนื้อหาต่อไปนี้ให้เป็น script สำหรับอ่านออกเสียง ฟังง่าย เป็นธรรมชาติ:\n\n[วางเนื้อหา]'}
+    ],
+    info:{แนะนำ:'ElevenLabs เสียงสมจริงที่สุด',ราคา:'ElevenLabs ฟรี 10k chars/เดือน',API:'ElevenLabs มี API ราคาเหมาะสม',ทางเลือก:'OpenAI TTS ราคาถูกกว่า'},
+    links:[{name:'ElevenLabs',url:'https://elevenlabs.io'},{name:'HeyGen',url:'https://heygen.com'},{name:'OpenAI TTS',url:'https://platform.openai.com/docs/guides/text-to-speech'}]},
+
+  docs:{icon:'📄',title:'Productivity / Docs',subtitle:'Claude ช่วยงานเอกสาร รายงาน สรุป ทุกประเภท',
+    system:'คุณคือผู้ช่วย productivity ที่เชี่ยวชาญการสร้างเอกสารมืออาชีพ ช่วยเขียนรายงาน สรุปการประชุม จัดระเบียบข้อมูล และสร้างเอกสารธุรกิจทุกประเภทให้ถูกต้อง ชัดเจน และมืออาชีพ',
+    prompts:[
+      {label:'สรุปประชุม',text:'สรุปการประชุมจากบันทึกต่อไปนี้ โดยระบุ: ประเด็นหลัก, มติที่ประชุม, action items และผู้รับผิดชอบ:\n\n[วางบันทึกการประชุม]'},
+      {label:'รายงานธุรกิจ',text:'เขียนรายงาน [ประเภท] สำหรับ [ผู้รับ] เกี่ยวกับ [หัวข้อ] ครอบคลุม executive summary, ข้อมูลหลัก และข้อเสนอแนะ'},
+      {label:'Email มืออาชีพ',text:'เขียน email [ประเภท: proposal/follow-up/complaint] ถึง [ผู้รับ] เกี่ยวกับ [เรื่อง] น้ำเสียง [formal/friendly] ให้กระชับและได้ผล'},
+      {label:'Template เอกสาร',text:'สร้าง template สำหรับ [ประเภทเอกสาร] ที่ [ชื่อองค์กร] ใช้ซ้ำได้ ครบถ้วนและมืออาชีพ'}
+    ],
+    info:{แนะนำ:'Notion AI + Claude ทำงานร่วมกัน',ราคา:'Claude ฟรี / Pro $20/เดือน',จุดเด่น:'ไทย-อังกฤษ ทำได้ดีทั้งคู่',เหมาะกับ:'ทุกขนาดองค์กร'},
+    links:[{name:'Notion AI',url:'https://notion.so'},{name:'Microsoft Copilot',url:'https://copilot.microsoft.com'},{name:'NotebookLM',url:'https://notebooklm.google.com'}]},
+
+  presentation:{icon:'📊',title:'Presentation / Slides',subtitle:'Claude สร้าง outline และ script สำหรับ Gamma / PowerPoint',
+    system:'คุณคือผู้เชี่ยวชาญการออกแบบ presentation และการนำเสนอ ช่วยสร้าง outline ที่ชัดเจน เนื้อหาที่โน้มน้าวใจ และ script สำหรับแต่ละ slide อย่างมืออาชีพ',
+    prompts:[
+      {label:'Outline Slide',text:'สร้าง outline สำหรับ presentation เรื่อง [หัวข้อ] จำนวน [จำนวน] slides สำหรับ [ผู้ฟัง] เวลา [นาที] นาที'},
+      {label:'Script แต่ละ slide',text:'เขียน script พูดสำหรับ slide นี้:\n\nหัวข้อ: [หัวข้อ slide]\nเนื้อหาหลัก: [bullet points]\nเวลา: [วินาที] วินาที'},
+      {label:'Gamma Prompt',text:'เขียน prompt สำหรับ Gamma AI เพื่อสร้าง presentation เรื่อง [หัวข้อ] ให้ดูเป็นมืออาชีพ สไตล์ [สไตล์] สำหรับ [กลุ่มเป้าหมาย]'},
+      {label:'เนื้อหา Key Message',text:'สรุป key message หลัก 3-5 ข้อสำหรับ presentation เรื่อง [หัวข้อ] ที่จะทำให้ผู้ฟัง [action ที่ต้องการ]'}
+    ],
+    info:{แนะนำ:'Gamma AI สร้างได้เร็วที่สุด',ราคา:'Gamma ฟรี 400 AI credits / $8/เดือน',ทางเลือก:'Beautiful.ai / Tome',จุดเด่น:'Claude + Gamma = 10 นาที ได้ deck'},
+    links:[{name:'Gamma AI',url:'https://gamma.app'},{name:'Tome',url:'https://tome.app'},{name:'Beautiful.ai',url:'https://beautiful.ai'}]},
+
+  translate:{icon:'🌐',title:'แปลภาษา AI',subtitle:'Claude แปลได้ทุกภาษา เข้าใจบริบทและสำนวน',
+    system:'คุณคือนักแปลมืออาชีพที่เชี่ยวชาญหลายภาษา แปลอย่างถูกต้อง เป็นธรรมชาติ รักษาความหมาย สำนวน และน้ำเสียงของต้นฉบับ พร้อมอธิบายความแตกต่างทางวัฒนธรรมถ้าจำเป็น',
+    prompts:[
+      {label:'แปล TH→EN',text:'แปลข้อความต่อไปนี้จากภาษาไทยเป็นอังกฤษ รักษาน้ำเสียง [formal/casual] และสำนวนที่เป็นธรรมชาติ:\n\n[วางข้อความ]'},
+      {label:'แปล EN→TH',text:'แปลข้อความต่อไปนี้จากภาษาอังกฤษเป็นไทย ให้อ่านง่ายและเป็นธรรมชาติ:\n\n[วางข้อความ]'},
+      {label:'แปลเอกสารธุรกิจ',text:'แปลเอกสาร [ประเภท: สัญญา/รายงาน/อีเมล] ต่อไปนี้ พร้อมอธิบายคำศัพท์เฉพาะทางที่สำคัญ:\n\n[วางเอกสาร]'},
+      {label:'ตรวจสอบการแปล',text:'ตรวจสอบและปรับปรุงการแปลนี้ให้ถูกต้องและเป็นธรรมชาติมากขึ้น:\n\nต้นฉบับ: [ข้อความต้นฉบับ]\nการแปล: [การแปลที่ต้องการตรวจ]'}
+    ],
+    info:{ภาษา:'100+ ภาษา',ดีที่สุด:'ไทย-อังกฤษ-ญี่ปุ่น-จีน',ทางเลือก:'DeepL ดีสำหรับยุโรป',ราคา:'Claude ฟรี / DeepL $8.99/เดือน'},
+    links:[{name:'DeepL',url:'https://deepl.com'},{name:'Google Translate',url:'https://translate.google.com'},{name:'Claude',url:'https://claude.ai'}]},
+
+  health:{icon:'🏋️',title:'Health & Fitness AI',subtitle:'Claude วางแผนออกกำลังกายและโภชนาการส่วนบุคคล',
+    system:'คุณคือผู้เชี่ยวชาญด้านสุขภาพและ fitness ที่ให้คำแนะนำที่ปลอดภัยและอิงหลักวิทยาศาสตร์ ช่วยวางแผนออกกำลังกาย โภชนาการ และไลฟ์สไตล์ที่เหมาะกับแต่ละบุคคล แต่ไม่แทนคำแนะนำจากแพทย์',
+    prompts:[
+      {label:'แผนออกกำลังกาย',text:'สร้างแผนออกกำลังกาย 4 สัปดาห์สำหรับ [เป้าหมาย: ลดน้ำหนัก/สร้างกล้ามเนื้อ/เพิ่มความอดทน] อายุ [อายุ] ออกกำลังกายได้ [จำนวน] วัน/สัปดาห์ มีอุปกรณ์: [อุปกรณ์]'},
+      {label:'แผนอาหาร',text:'วางแผนอาหาร 7 วันสำหรับ [เป้าหมาย] แคลอรี่ประมาณ [จำนวน] kcal/วัน หลีกเลี่ยง [อาหารที่แพ้/ไม่กิน]'},
+      {label:'ติดตามความก้าวหน้า',text:'ฉันออกกำลังกายมา [เวลา] เดือน [อธิบายสิ่งที่ทำ] แต่ผลลัพธ์ยังไม่ดี ช่วยวิเคราะห์และแนะนำการปรับปรุง'},
+      {label:'Recovery & Rest',text:'แนะนำแผนการพักฟื้นและ recovery หลังออกกำลังกายหนัก ครอบคลุม sleep, nutrition, active recovery'}
+    ],
+    info:{ข้อสำคัญ:'ไม่แทนคำแนะนำจากแพทย์',จุดเด่น:'Personalized ตามข้อมูลจริง',ราคา:'Claude ฟรี',แนะนำ:'ใช้ร่วมกับ app เช่น MyFitnessPal'},
+    links:[{name:'MyFitnessPal',url:'https://myfitnesspal.com'},{name:'Whoop',url:'https://whoop.com'},{name:'Freeletics',url:'https://freeletics.com'}]},
+
+  travel:{icon:'✈️',title:'Travel AI',subtitle:'Claude วางแผนท่องเที่ยวส่วนตัว ละเอียดและตรงใจ',
+    system:'คุณคือผู้เชี่ยวชาญการท่องเที่ยวที่รู้จักสถานที่ทั่วโลก ช่วยวางแผนการเดินทางที่ละเอียด เหมาะกับงบประมาณและสไตล์การท่องเที่ยว พร้อม tips จากประสบการณ์จริง',
+    prompts:[
+      {label:'แผนการเดินทาง',text:'วางแผนการเดินทาง [จุดหมาย] [จำนวน] วัน สำหรับ [จำนวนคน] งบประมาณ [งบ] บาท/คน สไตล์การท่องเที่ยว [culture/adventure/relaxation/food]'},
+      {label:'Itinerary รายวัน',text:'สร้าง itinerary รายวันสำหรับ [เมือง/ประเทศ] วันที่ [วัน] เน้น [ประเภทกิจกรรม] ไม่ชอบ [สิ่งที่ไม่ชอบ] ใช้เวลาเดินทางไม่เกิน [นาที] นาที/ครั้ง'},
+      {label:'เปรียบเทียบ Destination',text:'เปรียบเทียบ [A] กับ [B] สำหรับการท่องเที่ยว [ช่วงเดือน] สำหรับ [ประเภทนักท่องเที่ยว] ด้านราคา ความสะดวก สถานที่น่าไป'},
+      {label:'ประหยัดงบ',text:'แนะนำวิธีประหยัดงบสำหรับทริป [จุดหมาย] รวมถึง ที่พัก การเดินทาง อาหาร และ free activities ที่ดีที่สุด'}
+    ],
+    info:{จุดเด่น:'Personalized มากกว่า Google',ราคา:'Claude ฟรี',แนะนำ:'ใช้ร่วมกับ Kayak/Skyscanner',ข้อสำคัญ:'ตรวจสอบ visa และ entry requirements เองด้วย'},
+    links:[{name:'Kayak',url:'https://kayak.com'},{name:'Skyscanner',url:'https://skyscanner.net'},{name:'Booking.com',url:'https://booking.com'}]},
+
+  mental:{icon:'🧘',title:'Mental Health AI',subtitle:'Claude รับฟัง ช่วยคลาย stress ด้วยความเข้าใจ',
+    system:'คุณคือผู้ช่วยด้านสุขภาพจิตที่รับฟังอย่างเข้าใจ ไม่ตัดสิน ช่วยจัดการความเครียดและความวิตกกังวลด้วยเทคนิค CBT และ mindfulness ที่อิงหลักวิทยาศาสตร์ แต่ไม่แทนนักจิตวิทยาหรือจิตแพทย์',
+    prompts:[
+      {label:'ระบาย/ปรึกษา',text:'ฉันรู้สึก [อธิบายความรู้สึก] เพราะ [สาเหตุ] อยากได้คำแนะนำและการรับฟัง'},
+      {label:'จัดการ Stress',text:'ช่วยแนะนำเทคนิคจัดการความเครียดสำหรับ [สถานการณ์] ที่ทำได้ทันทีใน [เวลา] นาที'},
+      {label:'Mindfulness',text:'แนะนำแบบฝึกหัด mindfulness หรือ breathing exercise ที่เหมาะกับ [สถานการณ์: ก่อนนอน/ก่อน presentation/ระหว่างวัน]'},
+      {label:'CBT Thought Record',text:'ช่วยทำ thought record สำหรับความคิดนี้: [อธิบายความคิดที่รบกวน] โดยใช้เทคนิค CBT'}
+    ],
+    info:{ข้อสำคัญ:'ไม่แทนผู้เชี่ยวชาญ',วิกฤต:'โทร 1323 (สายด่วนสุขภาพจิต)',จุดเด่น:'ไม่ตัดสิน รับฟัง 24/7',แนะนำ:'ใช้เป็น first step ก่อนพบผู้เชี่ยวชาญ'},
+    links:[{name:'Woebot',url:'https://woebot.io'},{name:'Wysa',url:'https://wysa.com'},{name:'สายด่วนสุขภาพจิต 1323',url:'tel:1323'}]},
+
+  coding:{icon:'💻',title:'AI Coding',subtitle:'Claude เขียน debug review โค้ดทุกภาษา',
+    system:'คุณคือ senior software engineer ที่เชี่ยวชาญหลายภาษา เขียนโค้ดที่สะอาด มีประสิทธิภาพ และ maintainable ช่วย debug อธิบาย refactor และ review code อย่างละเอียด',
+    prompts:[
+      {label:'เขียน Streamlit App',text:'สร้าง Streamlit dashboard สำหรับ [จุดประสงค์] ที่มี:\n- [feature 1]\n- [feature 2]\n- [feature 3]\nใช้ mock data ก่อน สไตล์ [สี/theme]'},
+      {label:'Debug โค้ด',text:'ช่วย debug โค้ดนี้ บอก root cause และวิธีแก้:\n\n```python\n[วางโค้ดที่มีปัญหา]\n```\n\nError: [error message]'},
+      {label:'Review & Refactor',text:'Review โค้ดนี้และแนะนำการปรับปรุงด้าน:\n1. Code quality\n2. Performance\n3. Security\n4. Best practices\n\n```[ภาษา]\n[วางโค้ด]\n```'},
+      {label:'SQL Query',text:'เขียน SQL query สำหรับ [database: PostgreSQL/MySQL] ที่:\n- [requirement 1]\n- [requirement 2]\nTable structure: [อธิบาย tables]'}
+    ],
+    info:{ดีที่สุด:'Python, JavaScript, SQL, Bash',ทางเลือก:'Cursor IDE (แนะนำมาก)',ราคา:'Claude ฟรี / Pro $20/เดือน',tip:'บอก error message ทุกครั้ง'},
+    links:[{name:'Cursor IDE',url:'https://cursor.com'},{name:'GitHub Copilot',url:'https://github.com/features/copilot'},{name:'Claude Code',url:'https://claude.ai'}]},
+
+  automation:{icon:'⚙️',title:'Automation',subtitle:'Claude ออกแบบ workflow และเขียน automation script',
+    system:'คุณคือผู้เชี่ยวชาญด้าน automation และ workflow design ช่วยออกแบบ workflow ที่มีประสิทธิภาพ เขียน script สำหรับ Zapier/Make/n8n และ Python automation รวมถึงประเมิน ROI',
+    prompts:[
+      {label:'ออกแบบ Workflow',text:'ออกแบบ automation workflow สำหรับ [กระบวนการ] โดยใช้ [tools ที่มี] ระบุขั้นตอน trigger conditions และ error handling'},
+      {label:'n8n Flow',text:'เขียน n8n workflow JSON สำหรับ [automation task] ที่:\n- Trigger: [เงื่อนไขเริ่มต้น]\n- Actions: [การกระทำ]\n- Output: [ผลลัพธ์ที่ต้องการ]'},
+      {label:'Python Script',text:'เขียน Python script สำหรับ automation task:\n[อธิบาย task]\n\nInput: [รูปแบบข้อมูล input]\nOutput: [ผลลัพธ์ที่ต้องการ]\nLibraries: [ที่อนุญาต]'},
+      {label:'เปรียบเทียบ Tools',text:'เปรียบเทียบ [Zapier vs Make vs n8n] สำหรับ use case: [อธิบาย] ด้านราคา ความสามารถ และ ease of use'}
+    ],
+    info:{ฟรี:'n8n self-hosted ฟรี',ราคา:'Zapier $19.99/เดือน · Make $9/เดือน',แนะนำ:'n8n สำหรับ dev / Zapier สำหรับ no-code',tip:'เริ่มจาก simple workflow ก่อน'},
+    links:[{name:'Zapier',url:'https://zapier.com'},{name:'Make.com',url:'https://make.com'},{name:'n8n',url:'https://n8n.io'}]},
+
+  agent:{icon:'🤖',title:'AI Agent',subtitle:'Claude เป็น agentic AI ที่ Think→Plan→Act→Report',
+    system:'คุณคือ AI agent ที่วางแผนและดำเนินงานได้อย่างอิสระ เมื่อได้รับเป้าหมาย ให้แบ่งงานออกเป็นขั้นตอน วางแผนการดำเนินงาน และดำเนินการพร้อมรายงานผลในแต่ละขั้นตอน',
+    prompts:[
+      {label:'Research Task',text:'GOAL: วิจัยและสรุปข้อมูลเกี่ยวกับ [หัวข้อ]\n\nRequirements:\n- ครอบคลุมแง่มุม: [ระบุ]\n- Format: bullet points\n- ความยาว: [สั้น/กลาง/ยาว]\n\nเริ่มวางแผนและดำเนินการ'},
+      {label:'Content Creation',text:'GOAL: สร้าง content package สำหรับ [หัวข้อ] ประกอบด้วย:\n1. บทความ 500 คำ\n2. Social media posts 3 ชิ้น\n3. Email newsletter\n\nTarget audience: [กลุ่มเป้าหมาย]'},
+      {label:'Business Analysis',text:'GOAL: วิเคราะห์โอกาสทางธุรกิจสำหรับ [ไอเดีย] โดย:\n1. วิเคราะห์ตลาด\n2. คู่แข่ง top 5\n3. SWOT\n4. แนะนำ next steps'},
+      {label:'Code Project',text:'GOAL: สร้าง [ประเภท app] ที่มี:\n- Features: [list]\n- Tech stack: Python + Streamlit\n- Data: [mock หรือ real]\n\nวางแผนและเริ่ม implement ทีละขั้น'}
+    ],
+    info:{ดีที่สุด:'Claude Code (terminal)',รองลงมา:'Cursor Composer mode',ราคา:'Claude Pro $20/เดือน',tip:'ให้ goal ชัด บอก constraints ด้วย'},
+    links:[{name:'Claude Code',url:'https://claude.ai'},{name:'Devin',url:'https://devin.ai'},{name:'OpenAI Operator',url:'https://openai.com'}]},
+
+  data:{icon:'📈',title:'Data Analytics AI',subtitle:'Claude วิเคราะห์ข้อมูล หา insight สร้าง visualization',
+    system:'คุณคือ data analyst ที่เชี่ยวชาญ Python, SQL, statistics และ data visualization ช่วยวิเคราะห์ข้อมูล หา pattern และ insight อธิบายผลการวิเคราะห์ด้วยภาษาที่เข้าใจง่าย',
+    prompts:[
+      {label:'วิเคราะห์ข้อมูล',text:'วิเคราะห์ข้อมูลต่อไปนี้และหา insight สำคัญ:\n\n[วางข้อมูล หรืออธิบายโครงสร้าง]\n\nเป้าหมาย: [สิ่งที่อยากรู้]'},
+      {label:'Python Analysis',text:'เขียน Python code วิเคราะห์ CSV file ที่มี columns: [ชื่อ columns]\n\nต้องการ:\n- [analysis 1]\n- [analysis 2]\n- สร้างกราฟ: [ประเภท]'},
+      {label:'SQL Analysis',text:'เขียน SQL query เพื่อ:\n[สิ่งที่ต้องการวิเคราะห์]\n\nDatabase: [PostgreSQL/MySQL]\nTables: [อธิบาย tables และ relationships]'},
+      {label:'Dashboard Design',text:'ออกแบบ Streamlit dashboard สำหรับ [ประเภทข้อมูล/ธุรกิจ] ที่แสดง:\n- KPIs: [รายการ]\n- Charts: [ประเภท]\n- Filters: [ตัวกรอง]'}
+    ],
+    info:{แนะนำ:'Julius AI สะดวกที่สุด',ฟรี:'Claude + Python ทำได้ทุกอย่าง',เหมาะกับ:'CSV, JSON, SQL data',tip:'ส่ง sample data มาด้วยได้เลย'},
+    links:[{name:'Julius AI',url:'https://julius.ai'},{name:'Hex',url:'https://hex.tech'},{name:'Tableau',url:'https://tableau.com'}]},
+
+  marketing:{icon:'🎯',title:'Marketing / SEO AI',subtitle:'Claude เขียน copy, content strategy, SEO',
+    system:'คุณคือนักการตลาดดิจิทัลและ copywriter มืออาชีพ เขียน copy ที่โน้มน้าวใจ สร้าง content strategy ที่มีประสิทธิภาพ และ optimize SEO อย่างถูกต้องตามหลัก E-E-A-T',
+    prompts:[
+      {label:'Ad Copy',text:'เขียน ad copy สำหรับ [สินค้า/บริการ] platform [Facebook/Google/TikTok] เป้าหมาย [กลุ่มเป้าหมาย] จุดขาย [USP] tone [emotional/logical/urgent]'},
+      {label:'SEO Blog',text:'เขียนบทความ SEO เกี่ยวกับ [keyword หลัก] ความยาว 1000 คำ ครอบคลุม [topic cluster] เหมาะกับ search intent: [informational/commercial/transactional]'},
+      {label:'Social Media',text:'สร้าง social media content calendar 1 สัปดาห์สำหรับ [แบรนด์] platform [IG/FB/TikTok/LinkedIn] theme ของสัปดาห์: [หัวข้อ]'},
+      {label:'Email Campaign',text:'เขียน email campaign 3 ฉบับสำหรับ [เป้าหมาย: welcome/nurture/conversion] สำหรับ [product/service] กลุ่มเป้าหมาย: [personas]'}
+    ],
+    info:{จุดเด่น:'Claude เขียน Thai copy ได้ดีมาก',ทางเลือก:'Jasper (EN) / Copy.ai',ราคา:'Claude ฟรี / Pro $20',tip:'ให้ brand voice guide ก่อนเสมอ'},
+    links:[{name:'Jasper',url:'https://jasper.ai'},{name:'Surfer SEO',url:'https://surferseo.com'},{name:'Copy.ai',url:'https://copy.ai'}]},
+
+  customer:{icon:'💬',title:'Customer Service AI',subtitle:'Claude เขียน response templates และ chatbot script',
+    system:'คุณคือผู้เชี่ยวชาญด้าน customer service และ CX design ช่วยเขียน response templates ออกแบบ chatbot conversation flow และสร้าง FAQ ที่แก้ปัญหาลูกค้าได้จริง',
+    prompts:[
+      {label:'Response Templates',text:'เขียน customer service response templates สำหรับ [ประเภทปัญหา: คืนสินค้า/ล่าช้า/ของเสีย] ให้ฟังดู empathetic และ solution-focused'},
+      {label:'Chatbot Script',text:'ออกแบบ conversation flow สำหรับ chatbot [ธุรกิจ] ครอบคลุม:\n- Welcome message\n- FAQ top 10\n- Escalation to human\n- Tone: [formal/friendly]'},
+      {label:'FAQ ธุรกิจ',text:'สร้าง FAQ 20 ข้อสำหรับ [ธุรกิจ/สินค้า] ที่ตอบคำถามที่ลูกค้าถามบ่อยที่สุด ตอบให้กระชับและชัดเจน'},
+      {label:'Handle Complaint',text:'เขียน response สำหรับ complaint นี้ที่ลูกค้าเขียนมา:\n\n[complaint text]\n\nเป้าหมาย: de-escalate + หาทางออก + retain customer'}
+    ],
+    info:{แนะนำ:'ใช้ Claude draft + ทีม review',ทางเลือก:'Intercom Fin AI',ราคา:'Claude ฟรี',tip:'ใส่ brand voice และ policy ก่อน'},
+    links:[{name:'Intercom',url:'https://intercom.com'},{name:'Zendesk',url:'https://zendesk.com'},{name:'Freshdesk',url:'https://freshdesk.com'}]},
+
+  hr:{icon:'👥',title:'HR / Recruiting AI',subtitle:'Claude ช่วยงาน HR ตั้งแต่ JD ถึง performance review',
+    system:'คุณคือผู้เชี่ยวชาญด้าน HR และ talent management ช่วยเขียน job descriptions ออกแบบกระบวนการสัมภาษณ์ สร้าง evaluation rubric และแนะนำ best practices ด้าน HR',
+    prompts:[
+      {label:'Job Description',text:'เขียน job description สำหรับตำแหน่ง [ชื่อตำแหน่ง] ที่ [ชื่อบริษัท] ประกอบด้วย responsibilities, requirements, nice-to-have และ company culture'},
+      {label:'Interview Questions',text:'สร้าง interview questions 15 ข้อสำหรับตำแหน่ง [ตำแหน่ง] ครอบคลุม technical skills, soft skills, culture fit และ behavioral questions'},
+      {label:'Performance Review',text:'เขียน template performance review ที่ครอบคลุม goals achievement, competencies, development areas และ next steps สำหรับ [ระดับ: junior/mid/senior]'},
+      {label:'Onboarding Plan',text:'ออกแบบ onboarding plan 30-60-90 วันสำหรับ [ตำแหน่ง] ให้ new hire เรียนรู้เร็ว รู้สึก welcome และ productive ตั้งแต่ต้น'}
+    ],
+    info:{จุดเด่น:'ไทย+อังกฤษ ทำได้ดีทั้งคู่',ทางเลือก:'Workday AI / HireVue',ราคา:'Claude ฟรี',tip:'ใส่ company culture context ก่อน'},
+    links:[{name:'Workday',url:'https://workday.com'},{name:'HireVue',url:'https://hirevue.com'},{name:'LinkedIn Recruiter',url:'https://linkedin.com/talent'}]},
+
+  finance:{icon:'💰',title:'Finance AI',subtitle:'Claude วิเคราะห์การเงิน ไม่ใช่คำแนะนำการลงทุน',
+    system:'คุณคือนักวิเคราะห์การเงินที่ให้ข้อมูลและการวิเคราะห์เชิงการศึกษา ไม่ใช่คำแนะนำการลงทุนส่วนตัว ช่วยอธิบายแนวคิดทางการเงิน วิเคราะห์ข้อมูล และสร้าง financial models',
+    prompts:[
+      {label:'Financial Model',text:'สร้าง simple financial model สำหรับ [ธุรกิจ] ครอบคลุม revenue projections, cost structure และ break-even analysis สำหรับ 3 ปี'},
+      {label:'วิเคราะห์งบการเงิน',text:'ช่วยอธิบายและวิเคราะห์งบการเงินต่อไปนี้ หา key metrics และ red flags:\n\n[วางข้อมูล]'},
+      {label:'Budget Planning',text:'ช่วยวางแผนงบประมาณสำหรับ [ประเภท: personal/startup/department] income [จำนวน] บาท/เดือน เป้าหมาย: [เป้าหมาย]'},
+      {label:'อธิบาย Concept',text:'อธิบาย [concept: DCF/P/E ratio/WACC/ROE] ให้เข้าใจง่าย พร้อมตัวอย่างจริงและวิธีคำนวณ'}
+    ],
+    info:{ข้อสำคัญ:'ไม่ใช่คำแนะนำการลงทุน',จุดเด่น:'อธิบาย concept ได้ดีมาก',ทางเลือก:'FinChat.io สำหรับ stock data',tip:'ตรวจสอบกับผู้เชี่ยวชาญก่อนตัดสินใจ'},
+    links:[{name:'FinChat',url:'https://finchat.io'},{name:'Bloomberg',url:'https://bloomberg.com'},{name:'SET (ตลาดหลักทรัพย์ไทย)',url:'https://set.or.th'}]},
+
+  legal:{icon:'⚖️',title:'Legal AI',subtitle:'Claude ช่วยงาน legal ไม่ใช่ที่ปรึกษากฎหมาย',
+    system:'คุณคือผู้ช่วยด้านกฎหมายที่ให้ข้อมูลเชิงการศึกษา ไม่ใช่คำปรึกษากฎหมายส่วนตัว ช่วยร่างเอกสาร อธิบายกฎหมาย และวิเคราะห์สัญญาเบื้องต้น ก่อนส่งให้ทนายตรวจสอบ',
+    prompts:[
+      {label:'ร่างสัญญา',text:'ร่างสัญญา [ประเภท: จ้างงาน/เช่า/NDA/partnership] ระหว่าง [ฝ่าย A] และ [ฝ่าย B] ครอบคลุมประเด็น: [ระบุ] กฎหมายไทย'},
+      {label:'Review สัญญา',text:'ตรวจสอบสัญญาต่อไปนี้และชี้ประเด็นที่:\n1. ไม่ชัดเจน\n2. เสียเปรียบ\n3. ควรเพิ่มเติม\n\n[วางข้อความสัญญา]'},
+      {label:'อธิบายกฎหมาย',text:'อธิบาย [กฎหมาย/มาตรา/พ.ร.บ.] ให้เข้าใจง่าย พร้อมตัวอย่างกรณีที่ใช้บังคับจริง'},
+      {label:'Legal Research',text:'ค้นคว้าและสรุปกฎหมายที่เกี่ยวข้องกับ [ประเด็น] สำหรับ [ประเทศ/เขตอำนาจ] ครอบคลุม requirements, penalties และ best practices'}
+    ],
+    info:{ข้อสำคัญ:'ไม่แทนทนายความ',จุดเด่น:'ร่างเอกสารเบื้องต้นได้เร็ว',ทางเลือก:'Harvey AI (EN)',tip:'ให้ทนายตรวจสอบก่อนใช้จริง'},
+    links:[{name:'Harvey AI',url:'https://harvey.ai'},{name:'สภาทนายความไทย',url:'https://thailawyer.com'},{name:'ThaiLaws',url:'https://thailaws.com'}]},
+
+  education:{icon:'🎓',title:'Education AI',subtitle:'Claude เป็น personal tutor สอนได้ทุกวิชา',
+    system:'คุณคือ personal tutor ที่ยอดเยี่ยม สอนได้ทุกวิชาและทุกระดับ อธิบายเรื่องยากให้เข้าใจง่าย ปรับวิธีสอนตาม learning style สร้างแบบทดสอบ และให้ feedback ที่สร้างสรรค์',
+    prompts:[
+      {label:'สอนแนวคิด',text:'อธิบาย [แนวคิด/หัวข้อ] ให้เข้าใจง่ายสำหรับ [ระดับ: มัธยม/มหาวิทยาลัย/มือใหม่] ใช้ analogies และตัวอย่างจริง'},
+      {label:'สร้างแบบทดสอบ',text:'สร้างแบบทดสอบ [จำนวน] ข้อเกี่ยวกับ [หัวข้อ] ระดับ [ง่าย/กลาง/ยาก] รูปแบบ [multiple choice/true-false/short answer] พร้อม answer key'},
+      {label:'Study Plan',text:'สร้าง study plan สำหรับ [วิชา/การสอบ] เวลาเตรียมตัว [จำนวน] สัปดาห์ เวลาเรียนได้ [ชั่วโมง]/วัน จุดอ่อน: [ระบุ]'},
+      {label:'อธิบายโจทย์',text:'อธิบาย step-by-step วิธีแก้โจทย์นี้ พร้อมอธิบายแนวคิดที่ใช้:\n\n[วางโจทย์]'}
+    ],
+    info:{จุดเด่น:'ปรับระดับตามผู้เรียนได้',ราคา:'Claude ฟรี',ทางเลือก:'Khanmigo (EN) ดีมาก',tip:'บอกระดับและ background ก่อน'},
+    links:[{name:'Khan Academy',url:'https://khanacademy.org'},{name:'Duolingo',url:'https://duolingo.com'},{name:'Coursera',url:'https://coursera.org'}]},
+
+  architecture:{icon:'🏗️',title:'Architecture / CAD AI',subtitle:'Claude ช่วยออกแบบและวางแผนสถาปัตยกรรม',
+    system:'คุณคือสถาปนิกและผู้เชี่ยวชาญด้านการออกแบบอาคาร ช่วยวางแผน brief ออกแบบ space programming อธิบาย building codes และสร้าง specification documents',
+    prompts:[
+      {label:'Design Brief',text:'สร้าง design brief สำหรับ [ประเภทอาคาร] พื้นที่ [ขนาด] ตรม งบประมาณ [จำนวน] ล้านบาท ความต้องการหลัก: [ระบุ] context: [สถานที่/สภาพแวดล้อม]'},
+      {label:'Space Program',text:'สร้าง space program สำหรับ [ประเภทอาคาร] ผู้ใช้งาน [จำนวน] คน รายการพื้นที่ทั้งหมดพร้อมขนาดที่เหมาะสมและความสัมพันธ์ระหว่างพื้นที่'},
+      {label:'Specification',text:'เขียน specification สำหรับ [ส่วนของอาคาร: โครงสร้าง/งานระบบ/วัสดุตกแต่ง] มาตรฐาน [TIS/ASTM] ราคาประมาณ [งบ]'},
+      {label:'Code Compliance',text:'ตรวจสอบ building code compliance สำหรับ [ประเภทอาคาร] ตาม [กฎหมายควบคุมอาคาร/fire code] ครอบคลุมประเด็น: [ระบุ]'}
+    ],
+    info:{ข้อสำคัญ:'ตรวจสอบกับสถาปนิกผู้รับใบอนุญาต',จุดเด่น:'Concept และ brief ได้เร็ว',ทางเลือก:'Autodesk AI สำหรับ CAD จริง',tip:'ใส่ local codes และ context'},
+    links:[{name:'Autodesk',url:'https://autodesk.com'},{name:'SketchUp',url:'https://sketchup.com'},{name:'Archistar',url:'https://archistar.ai'}]},
+
+  climate:{icon:'🌿',title:'Climate & Agriculture AI',subtitle:'Claude วิเคราะห์ข้อมูลสภาพแวดล้อมและเกษตรกรรม',
+    system:'คุณคือผู้เชี่ยวชาญด้าน climate science และ precision agriculture ช่วยวิเคราะห์ข้อมูลสภาพอากาศ วางแผนการเกษตร ประเมิน carbon footprint และแนะนำ sustainable practices',
+    prompts:[
+      {label:'Carbon Footprint',text:'คำนวณและวิเคราะห์ carbon footprint สำหรับ [กิจกรรม/ธุรกิจ] จาก data:\n[วางข้อมูล]\n\nแนะนำวิธีลด emissions ที่ทำได้จริง'},
+      {label:'แผนการเกษตร',text:'วางแผนการเพาะปลูก [พืช] พื้นที่ [ขนาด] ไร่ ภาค [เหนือ/กลาง/ใต้/ออกอีสาน] ฤดูกาล [ระบุ] เน้น [yield/organic/water efficient]'},
+      {label:'Climate Risk',text:'ประเมิน climate risk สำหรับ [ธุรกิจ/พื้นที่] ครอบคลุม physical risks, transition risks และแนวทาง adaptation'},
+      {label:'Sustainable Practices',text:'แนะนำ sustainable practices สำหรับ [ประเภทธุรกิจ] ที่ทำได้จริงภายใต้งบประมาณ [งบ] บาท พร้อม ROI และ timeline'}
+    ],
+    info:{จุดเด่น:'วิเคราะห์ข้อมูลได้ดี',ข้อมูลสด:'ใช้ร่วมกับ weather API',ทางเลือก:'ClimateAI สำหรับ prediction',tip:'ใส่ historical data เพื่อผลแม่นขึ้น'},
+    links:[{name:'ClimateAI',url:'https://climate.ai'},{name:'IBM PAIRS',url:'https://ibm.com/products/environmental-intelligence-suite'},{name:'Prospera',url:'https://prospera.ag'}]},
+
+  cloud:{icon:'☁️',title:'Cloud AI Platform',subtitle:'Claude แนะนำ setup และ architecture สำหรับ AWS/Azure/GCP',
+    system:'คุณคือ cloud architect ที่เชี่ยวชาญ AWS, Azure และ Google Cloud ช่วยออกแบบ architecture เลือก services ที่เหมาะสม เขียน IaC และแนะนำ best practices ด้าน security และ cost',
+    prompts:[
+      {label:'Cloud Architecture',text:'ออกแบบ cloud architecture สำหรับ [ประเภท application] บน [AWS/Azure/GCP] requirements:\n- Users: [จำนวน]\n- Traffic: [จำนวน] req/day\n- Budget: $[จำนวน]/เดือน'},
+      {label:'ML Pipeline',text:'ออกแบบ ML pipeline บน [platform] สำหรับ [use case] ครอบคลุม data ingestion, training, deployment และ monitoring'},
+      {label:'Cost Optimization',text:'วิเคราะห์และแนะนำวิธีลด cloud cost สำหรับ architecture ต่อไปนี้:\n[อธิบาย current setup]\nงบปัจจุบัน: $[จำนวน]/เดือน'},
+      {label:'Terraform Code',text:'เขียน Terraform code สำหรับ deploy [infrastructure] บน [AWS/Azure/GCP] ครอบคลุม [components] พร้อม variables และ outputs'}
+    ],
+    info:{แนะนำ:'เริ่มจาก managed services ก่อน',ราคา:'Free tier มีทุก cloud',tip:'ใช้ Well-Architected Framework',ทางเลือก:'Pulumi สำหรับ Python IaC'},
+    links:[{name:'AWS',url:'https://aws.amazon.com'},{name:'Google Cloud',url:'https://cloud.google.com'},{name:'Azure',url:'https://azure.microsoft.com'}]},
+
+  llmapi:{icon:'🔌',title:'LLM APIs',subtitle:'Claude สอนวิธีใช้ Anthropic API และ integrate ใน app',
+    system:'คุณคือ API integration expert ที่เชี่ยวชาญ Anthropic, OpenAI และ other LLM APIs ช่วยเขียน code ที่ถูกต้อง ปลอดภัย และ production-ready',
+    prompts:[
+      {label:'Anthropic API Basic',text:'เขียน Python code เพื่อ:\n1. เรียก Anthropic API\n2. ส่ง prompt: [prompt]\n3. Handle response\n4. Error handling\n\nUse: claude-sonnet-4-20250514'},
+      {label:'Streaming Response',text:'เขียน Python code สำหรับ streaming response จาก Claude API พร้อม:\n- Real-time output\n- Progress indicator\n- Error handling\n- Use case: [chatbot/analysis/generation]'},
+      {label:'RAG System',text:'เขียน Python code สำหรับ simple RAG system ที่:\n1. Load documents จาก [source]\n2. Create embeddings\n3. Store ใน [Chroma/Pinecone]\n4. Query และ generate response'},
+      {label:'Compare Models',text:'เปรียบเทียบ API ของ Anthropic vs OpenAI vs Groq สำหรับ use case: [ระบุ] ด้านราคา speed context window และ capabilities'}
+    ],
+    info:{ราคา:'Claude Haiku ถูกที่สุด',เร็วที่สุด:'Groq API (Llama)',context:'Claude 200k tokens',tip:'ใส่ API key ใน .env ไม่ใส่ใน code'},
+    links:[{name:'Anthropic API Docs',url:'https://docs.anthropic.com'},{name:'OpenAI API',url:'https://platform.openai.com'},{name:'Groq',url:'https://groq.com'}]},
+
+  vectordb:{icon:'🗄️',title:'Vector Database',subtitle:'Claude อธิบาย RAG และเขียน code สำหรับ Vector DB',
+    system:'คุณคือผู้เชี่ยวชาญด้าน vector databases, embeddings และ RAG systems ช่วยออกแบบ architecture เขียน code และแนะนำ best practices สำหรับ semantic search และ knowledge retrieval',
+    prompts:[
+      {label:'Setup Chroma',text:'เขียน Python code สำหรับ:\n1. Setup Chroma DB local\n2. Load documents จาก [source]\n3. Create embeddings\n4. Query ด้วย semantic search\n5. Integrate กับ Claude'},
+      {label:'RAG Pipeline',text:'สร้าง complete RAG pipeline สำหรับ [use case: document QA/knowledge base/chatbot] ที่:\n- Sources: [PDF/web/database]\n- Embedding model: [เลือก]\n- Vector DB: [Chroma/Pinecone/Weaviate]'},
+      {label:'เปรียบเทียบ Vector DB',text:'เปรียบเทียบ Pinecone vs Weaviate vs Chroma vs Qdrant สำหรับ use case: [ระบุ] ด้านราคา performance และ ease of use'},
+      {label:'Optimize Retrieval',text:'ช่วย optimize RAG system ที่มีปัญหา:\n[อธิบายปัญหา]\n\nCurrent setup: [อธิบาย architecture]'}
+    ],
+    info:{ฟรี:'Chroma (local), Weaviate (cloud tier)',แนะนำ:'Chroma สำหรับเริ่มต้น',ใช้กับ:'LangChain, LlamaIndex',tip:'chunk size ส่งผลต่อ quality มาก'},
+    links:[{name:'Chroma',url:'https://trychroma.com'},{name:'Pinecone',url:'https://pinecone.io'},{name:'Weaviate',url:'https://weaviate.io'}]},
+
+  observability:{icon:'🔍',title:'AI Observability',subtitle:'Claude แนะนำการ monitor และ evaluate LLM systems',
+    system:'คุณคือผู้เชี่ยวชาญด้าน LLM observability, evaluation และ monitoring ช่วยออกแบบ evaluation framework ติดตาม model performance และ detect ปัญหาใน production',
+    prompts:[
+      {label:'Eval Framework',text:'ออกแบบ evaluation framework สำหรับ [LLM application type] ที่วัด:\n- Accuracy\n- Hallucination rate\n- Latency\n- Cost\n\nพร้อม Python code เบื้องต้น'},
+      {label:'LangSmith Setup',text:'เขียน Python code สำหรับ integrate LangSmith กับ LangChain application เพื่อ trace ทุก LLM call พร้อม custom metadata'},
+      {label:'Cost Monitoring',text:'ออกแบบ system monitoring cost ของ LLM API calls ที่:\n- Track usage per user/feature\n- Alert เมื่อเกิน budget\n- Dashboard ด้วย Streamlit'},
+      {label:'Quality Metrics',text:'แนะนำ metrics และวิธีวัด quality สำหรับ [RAG system/chatbot/summarization] พร้อมตัวอย่าง benchmark dataset'}
+    ],
+    info:{แนะนำ:'LangSmith (ฟรี tier มี)',ทางเลือก:'Weights & Biases / Arize',tip:'เริ่มจาก logging ก่อน metric',ราคา:'LangSmith ฟรี 5k traces/เดือน'},
+    links:[{name:'LangSmith',url:'https://smith.langchain.com'},{name:'Weights & Biases',url:'https://wandb.ai'},{name:'Arize AI',url:'https://arize.com'}]},
+
+  opensource:{icon:'🧩',title:'Open Source LLM',subtitle:'Claude แนะนำและเขียน code สำหรับ run local models',
+    system:'คุณคือผู้เชี่ยวชาญด้าน open source LLMs ช่วยเลือก model ที่เหมาะสม ตั้งค่า local inference และ fine-tune สำหรับ use case เฉพาะ',
+    prompts:[
+      {label:'เลือก Model',text:'แนะนำ open source LLM ที่เหมาะสมสำหรับ:\n- Use case: [ระบุ]\n- Hardware: [GPU/RAM]\n- Language: [ไทย/English/multilingual]\n- Privacy requirement: [strict/normal]'},
+      {label:'Setup Ollama',text:'เขียน guide สำหรับ setup Ollama บน [Mac/Windows/Linux] เพื่อ run [Llama/Mistral/Qwen] พร้อม Python integration code'},
+      {label:'Fine-tuning Plan',text:'วางแผน fine-tuning [base model] สำหรับ [domain/task] ครอบคลุม:\n- Dataset requirements\n- Training setup\n- Evaluation metrics\n- Hardware needed'},
+      {label:'Compare Models',text:'เปรียบเทียบ Llama 3.3 vs Mistral vs Deepseek vs Qwen สำหรับ [task] ด้าน performance, ภาษาไทย, resource usage'}
+    ],
+    info:{เร็วที่สุด:'Groq API (cloud, ฟรี tier)',local:'Ollama + Llama 3.3',ภาษาไทย:'Typhoon2 (SCB AI)',ข้อดี:'Privacy, no cost per token'},
+    links:[{name:'Ollama',url:'https://ollama.com'},{name:'Hugging Face',url:'https://huggingface.co'},{name:'Groq',url:'https://groq.com'},{name:'Typhoon2',url:'https://typhoon.opentyphoon.ai'}]},
+
+  orchestration:{icon:'🔗',title:'AI Orchestration',subtitle:'Claude เขียน LangChain/CrewAI สำหรับ multi-agent systems',
+    system:'คุณคือผู้เชี่ยวชาญด้าน AI orchestration frameworks ช่วยออกแบบและเขียน code สำหรับ LangChain, LlamaIndex, CrewAI และ AutoGen เพื่อสร้าง complex AI workflows',
+    prompts:[
+      {label:'LangChain Chain',text:'เขียน LangChain code สำหรับ [task] ที่:\n1. ใช้ Claude เป็น LLM\n2. มี memory\n3. เรียก tools: [tools]\n4. Output: [format]'},
+      {label:'CrewAI Agents',text:'สร้าง CrewAI setup สำหรับ [workflow] ที่มี agents:\n- Agent 1: [role/goal]\n- Agent 2: [role/goal]\n- Agent 3: [role/goal]\n\nTask: [final goal]'},
+      {label:'RAG + LangChain',text:'เขียน complete LangChain RAG application ที่:\n- Load: [document sources]\n- Embed + Store: Chroma\n- Retrieve + Generate: Claude\n- Interface: Streamlit'},
+      {label:'AutoGen Setup',text:'สร้าง AutoGen multi-agent conversation สำหรับ [problem] ที่ agents ช่วยกัน solve ปัญหาได้โดยอัตโนมัติ'}
+    ],
+    info:{แนะนำ:'LangChain สำหรับ RAG',ทางเลือก:'LlamaIndex / CrewAI',ราคา:'ทั้งหมดฟรี (open source)',tip:'เริ่มจาก simple chain ก่อน'},
+    links:[{name:'LangChain',url:'https://langchain.com'},{name:'LlamaIndex',url:'https://llamaindex.ai'},{name:'CrewAI',url:'https://crewai.com'}]},
+
+  agi:{icon:'🧠',title:'AGI Research',subtitle:'Claude อธิบาย AGI, alignment และ AI futures',
+    system:'คุณคือผู้เชี่ยวชาญด้าน AI research และ AGI ที่อธิบายแนวคิดซับซ้อนได้เข้าใจง่าย ครอบคลุม current capabilities, limitations, timelines และ safety concerns อย่างสมดุลและมีหลักฐาน',
+    prompts:[
+      {label:'AGI คืออะไร',text:'อธิบาย AGI (Artificial General Intelligence) คืออะไร ต่างจาก AI ปัจจุบันอย่างไร และทำไมถึงสำคัญ'},
+      {label:'Timeline ล่าสุด',text:'สรุปมุมมองของนักวิจัยชั้นนำเกี่ยวกับ timeline ของ AGI ข้อโต้เถียงหลักๆ และ uncertainty ที่มีอยู่'},
+      {label:'Alignment Problem',text:'อธิบาย AI alignment problem ว่าคืออะไร ทำไมยาก และวิธีที่ Anthropic/OpenAI/DeepMind พยายามแก้ปัญหานี้'},
+      {label:'Impact ต่อสังคม',text:'วิเคราะห์ผลกระทบที่อาจเกิดขึ้นจาก AGI ต่อ [เศรษฐกิจ/งาน/การศึกษา/ความเหลื่อมล้ำ] อย่างสมดุลทั้งโอกาสและความเสี่ยง'}
+    ],
+    info:{แหล่งดี:'Anthropic, DeepMind research papers',podcast:'80,000 Hours, The TWIML AI Podcast',book:'The Alignment Problem (Brian Christian)',คำเตือน:'ข้อมูลเปลี่ยนเร็วมาก ติดตามสม่ำเสมอ'},
+    links:[{name:'Anthropic Research',url:'https://anthropic.com/research'},{name:'DeepMind',url:'https://deepmind.google'},{name:'AI Safety Institute',url:'https://aisi.gov.uk'}]},
+
+  multimodal:{icon:'👁️',title:'Multimodal AI',subtitle:'Claude รับทั้งข้อความและภาพ วิเคราะห์ได้ทุกอย่าง',
+    system:'คุณคือผู้เชี่ยวชาญด้าน multimodal AI ที่วิเคราะห์ภาพ chart กราฟ เอกสาร และ visual content ได้อย่างละเอียด',
+    prompts:[
+      {label:'วิเคราะห์ภาพ',text:'[แนบภาพ] วิเคราะห์ภาพนี้อย่างละเอียด ระบุ:\n1. เนื้อหาหลัก\n2. รายละเอียดสำคัญ\n3. Context และ implication\n4. ความผิดปกติ (ถ้ามี)'},
+      {label:'อ่าน Chart/Graph',text:'[แนบภาพ chart] อ่านและวิเคราะห์ chart นี้:\n- ข้อมูลที่แสดง\n- Trend สำคัญ\n- Key insights\n- ข้อสังเกตพิเศษ'},
+      {label:'OCR เอกสาร',text:'[แนบภาพ] ถอดข้อความจากภาพเอกสารนี้ให้ครบถ้วน จัดรูปแบบให้อ่านง่าย'},
+      {label:'UI/UX Review',text:'[แนบภาพ screenshot] Review UI/UX ของหน้านี้:\n- Usability issues\n- Visual hierarchy\n- Accessibility\n- แนะนำการปรับปรุง'}
+    ],
+    info:{จุดเด่น:'Claude เห็นภาพและ text พร้อมกัน',ขนาดไฟล์:'สูงสุด 5MB/ภาพ',format:'JPG, PNG, GIF, WebP',tip:'อธิบายบริบทประกอบภาพด้วย'},
+    links:[{name:'Claude.ai (รองรับ upload ภาพ)',url:'https://claude.ai'},{name:'GPT-4o (vision)',url:'https://chatgpt.com'},{name:'Gemini',url:'https://gemini.google.com'}]},
+
+  reasoning:{icon:'💡',title:'Reasoning Models',subtitle:'Claude อธิบาย chain-of-thought และ reasoning AI',
+    system:'คุณคือผู้เชี่ยวชาญด้าน AI reasoning ที่อธิบายวิธีที่ LLMs คิดและแก้ปัญหาซับซ้อน ช่วยออกแบบ prompts ที่ดึงความสามารถ reasoning ออกมาได้เต็มที่',
+    prompts:[
+      {label:'อธิบาย Chain-of-Thought',text:'อธิบาย chain-of-thought prompting คืออะไร ทำงานยังไง และตัวอย่างที่เห็นผลชัดเจนเมื่อเทียบกับ standard prompting'},
+      {label:'Math Problem',text:'แก้โจทย์คณิตศาสตร์นี้ step-by-step แสดง reasoning ทุกขั้นตอน:\n\n[โจทย์]'},
+      {label:'Logic Puzzle',text:'แก้ logic puzzle นี้ อธิบาย reasoning process ทุกขั้น:\n\n[puzzle]'},
+      {label:'เปรียบเทียบ Models',text:'เปรียบเทียบ reasoning capabilities ของ o3 (OpenAI) vs Claude Opus vs Gemini 2.0 Flash Thinking สำหรับ task ประเภท [math/coding/logic/science]'}
+    ],
+    info:{ดีที่สุด:'o3 สำหรับ math/science',สมดุล:'Claude Opus',ราคา:'o3 แพงกว่า Claude มาก',tip:'ให้เวลา model คิดด้วย extended thinking'},
+    links:[{name:'OpenAI o3',url:'https://openai.com'},{name:'Claude Opus',url:'https://claude.ai'},{name:'Gemini Thinking',url:'https://gemini.google.com'}]},
+
+  safety:{icon:'🔒',title:'AI Safety & Alignment',subtitle:'Claude อธิบาย AI safety research และ responsible AI',
+    system:'คุณคือผู้เชี่ยวชาญด้าน AI safety และ alignment อธิบายแนวคิดสำคัญ ความก้าวหน้าของ research และ implications สำหรับการพัฒนา AI อย่างรับผิดชอบ',
+    prompts:[
+      {label:'AI Safety คืออะไร',text:'อธิบาย AI safety คืออะไร ทำไมถึงสำคัญ และความแตกต่างระหว่าง AI safety ระยะสั้น (bias, misuse) กับระยะยาว (misalignment, AGI risk)'},
+      {label:'Constitutional AI',text:'อธิบาย Constitutional AI ของ Anthropic ว่าทำงานยังไง และแก้ปัญหา alignment อย่างไรเมื่อเทียบกับ RLHF แบบเดิม'},
+      {label:'Red Teaming',text:'อธิบาย AI red teaming คืออะไร ทำไมจำเป็น และวิธีที่บริษัท AI ใช้เพื่อค้นหาช่องโหว่ก่อน deploy'},
+      {label:'Responsible AI Guide',text:'สร้าง practical guide สำหรับ [นักพัฒนา/องค์กร/ผู้ใช้] ในการใช้ AI อย่างรับผิดชอบ ครอบคลุม dos and don\'ts ที่ทำได้จริง'}
+    ],
+    info:{แหล่งดี:'Anthropic research, AI Safety Institute',course:'BlueDot Impact AI Safety Fundamentals',ความสำคัญ:'Growing field ต้องการคน',tip:'ติดตาม policy developments ด้วย'},
+    links:[{name:'Anthropic Safety',url:'https://anthropic.com/safety'},{name:'AI Safety Institute',url:'https://aisi.gov.uk'},{name:'BlueDot Impact',url:'https://aisafetyfundamentals.com'}]}
+};
+
+// ── CURRENT STATE ──
+let currentTool = null;
+let chatHistory = [];
+
+// ── OPEN MODAL ──
+function openModal(toolId) {
+  const tool = TOOLS[toolId];
+  if (!tool) return;
+  currentTool = toolId;
+  chatHistory = [];
+
+  document.getElementById('modal-icon').textContent = tool.icon;
+  document.getElementById('modal-title').textContent = tool.title;
+  document.getElementById('modal-subtitle').textContent = tool.subtitle;
+
+  // clear chat
+  document.getElementById('chat-messages').innerHTML = '';
+  document.getElementById('chat-textarea').value = '';
+
+  // key warning
+  const warn = document.getElementById('key-warn');
+  warn.style.display = getKey() ? 'none' : 'flex';
+
+  // populate prompts
+  const grid = document.getElementById('prompt-templates-grid');
+  grid.innerHTML = '';
+  tool.prompts.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'prompt-tpl';
+    div.innerHTML = `<div class="prompt-tpl-label">${p.label}</div><div class="prompt-tpl-text">${p.text.replace(/\n/g,'<br>').substring(0,100)}...</div>`;
+    div.onclick = () => {
+      document.getElementById('chat-textarea').value = p.text;
+      switchTabById('use');
+      document.getElementById('chat-textarea').focus();
+    };
+    grid.appendChild(div);
+  });
+
+  // populate info
+  const infoGrid = document.getElementById('info-grid');
+  infoGrid.innerHTML = '';
+  Object.entries(tool.info).forEach(([k, v]) => {
+    infoGrid.innerHTML += `<div class="info-item"><div class="info-item-label">${k}</div><div class="info-item-val">${v}</div></div>`;
+  });
+
+  // populate links
+  const linkList = document.getElementById('link-list');
+  linkList.innerHTML = '';
+  tool.links.forEach(l => {
+    linkList.innerHTML += `<a class="ext-link" href="${l.url}" target="_blank">${l.name}<span>↗ เปิดเว็บ</span></a>`;
+  });
+
+  // reset to use tab
+  switchTabById('use');
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function switchTabById(id) {
+  document.querySelectorAll('.modal-tab').forEach((t,i) => {
+    const ids = ['use','prompts','info'];
+    t.classList.toggle('active', ids[i] === id);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeOnOverlay(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// ── OPEN NO-API MODAL ──
+function openNoApi(name, icon, reason, urlsStr) {
+  document.getElementById('noapi-icon').textContent = icon;
+  document.getElementById('noapi-title').textContent = name;
+  document.getElementById('noapi-reason').textContent = reason;
+
+  const urls = urlsStr.split(',');
+  const names = name.split('/');
+  const linkList = document.getElementById('noapi-links');
+  linkList.innerHTML = '';
+  urls.forEach((u, i) => {
+    const label = u.replace('https://','').replace('http://','').split('/')[0];
+    linkList.innerHTML += `<a class="ext-link" href="${u.trim()}" target="_blank">${label}<span>↗ เปิดเว็บ</span></a>`;
+  });
+
+  document.getElementById('noapi-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeNoApiOnOverlay(e) {
+  if (e.target === document.getElementById('noapi-overlay')) {
+    document.getElementById('noapi-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+document.getElementById('noapi-overlay').querySelector('.modal-close').onclick = () => {
+  document.getElementById('noapi-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+};
+
+// ── SEND MESSAGE ──
+async function sendMessage() {
+  const key = getKey();
+  const textarea = document.getElementById('chat-textarea');
+  const msg = textarea.value.trim();
+  if (!msg) return;
+  if (!key) {
+    document.getElementById('key-warn').style.display = 'flex';
+    return;
+  }
+
+  const tool = TOOLS[currentTool];
+  const messagesEl = document.getElementById('chat-messages');
+  const btn = document.getElementById('send-btn');
+
+  // Add user message
+  messagesEl.innerHTML += `<div class="msg msg-user"><div class="msg-label">คุณ</div>${escHtml(msg)}</div>`;
+  chatHistory.push({role:'user', content: msg});
+  textarea.value = '';
+  btn.disabled = true;
+  btn.textContent = 'กำลังคิด...';
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  // Loading
+  const loadId = 'load-' + Date.now();
+  messagesEl.innerHTML += `<div class="msg msg-ai loading" id="${loadId}"><div class="msg-label">Claude</div>กำลังประมวลผล...</div>`;
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-allow-browser': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-5',
+        max_tokens: 1500,
+        system: tool.system,
+        messages: chatHistory
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.error) throw new Error(data.error.message);
+
+    const reply = data.content?.[0]?.text || 'ไม่ได้รับ response';
+    chatHistory.push({role:'assistant', content: reply});
+
+    const loadEl = document.getElementById(loadId);
+    if (loadEl) {
+      loadEl.classList.remove('loading');
+      loadEl.innerHTML = `<div class="msg-label">Claude · ${tool.title}</div>${formatReply(reply)}`;
+    }
+  } catch(err) {
+    const loadEl = document.getElementById(loadId);
+    if (loadEl) {
+      loadEl.innerHTML = `<div class="msg-label">Error</div>เกิดข้อผิดพลาด: ${err.message}<br><small>ตรวจสอบ API key และ network</small>`;
+    }
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'ส่ง →';
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+function formatReply(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/`([^`]+)`/g,'<code style="background:rgba(255,255,255,.08);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-size:12px">$1</code>')
+    .replace(/\n/g,'<br>');
+}
+
+// Enter to send
+document.getElementById('chat-textarea').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sendMessage();
+});
+
+// Escape to close
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeModal();
+    document.getElementById('noapi-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+</script>
+</body>
+</html>
