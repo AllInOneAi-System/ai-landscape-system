@@ -173,6 +173,19 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-si
   .modal{border-radius:12px;}
 }
 </style>
+
+<style>
+html { height: 100%; }
+body { min-height: 100%; }
+.modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 99999 !important;
+}
+</style>
 </head>
 <body>
 
@@ -1242,6 +1255,33 @@ document.addEventListener('keydown', e => {
     closeModal();
     document.getElementById('noapi-overlay').classList.remove('open');
     document.body.style.overflow = '';
+  }
+});
+</script>
+
+<script>
+// Auto-scroll iframe to top when modal opens so modal is visible
+function scrollToModal() {
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}
+// Patch openModal
+var _origOpenModal = window.openModal;
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof openModal !== 'undefined') {
+    var orig = openModal;
+    openModal = function(toolKey) {
+      orig(toolKey);
+      scrollToModal();
+    };
+  }
+  if (typeof openNoApi !== 'undefined') {
+    var origNoApi = openNoApi;
+    openNoApi = function(a,b,c,d) {
+      origNoApi(a,b,c,d);
+      scrollToModal();
+    };
   }
 });
 </script>
